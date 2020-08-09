@@ -8,12 +8,13 @@ import { BrowserRouter as Router, Route ,Switch} from "react-router-dom";  //SPA
 import { Provider } from 'react-redux'
 
 //REDUX関連
-import Store from "./OriginalRoot/store"
+import Store from "./OriginalRoot/redux/store"
 
 //各ページ
-import TopPage from "./OriginalRoot/top"
-import RouteFail from "./OriginalRoot/route_faire"
-import ProjectDetail from "./OriginalRoot/project_detail"
+import TopPage from "./OriginalRoot/page/top"
+import RouteFail from "./OriginalRoot/page/route_faire"
+import ProjectDetail from "./OriginalRoot/page/project_detail"
+import ProjectAdd from "./OriginalRoot/page/project_add"
 
 // import Home from "./OriginalRoot/Container"
 // import {Home2} from "./OriginalRoot/unuse/home2"
@@ -25,7 +26,10 @@ ReactDOM.render(
       <Router>
         <Switch>
           <Route exact path="/" component={TopPage}></Route>
-          <Route path="/projectdetail" component={ProjectDetail}></Route>
+          {/* プロジェクト詳細画面 */}
+          <Route path="/detail" component={ProjectDetail}></Route>
+          {/* プロジェクト新規登録画面 */}
+          <Route path="/add" component={ProjectAdd}></Route>
           <Route component={RouteFail} />
         </Switch>
       </Router>

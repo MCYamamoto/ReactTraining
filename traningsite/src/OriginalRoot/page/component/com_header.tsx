@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import {connect,} from 'react-redux'
 import {Link} from "react-router-dom"
 import {} from "semantic-ui-react"
-import "./header.scss"
+import "../../css/com_header.scss"
 
 class ComHeaer extends Component
 {
@@ -36,7 +36,7 @@ class ComHeaer extends Component
                 <h1><Link className="header-link" to="/">Project List</Link></h1>
                 <nav className="header-nav">
                     <ul>
-                        <li><Link className="header-link" to="#">ADD PROJECT</Link></li>
+                        <li><Link className="header-link" to="/add">ADD PROJECT</Link></li>
                     </ul>
 
                     {/* 今回は使わないスタイル設定 */}

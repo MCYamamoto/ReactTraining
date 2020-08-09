@@ -1,28 +1,28 @@
 import React, { Component } from 'react'
 import {connect,} from 'react-redux'
-import {ExternReduxState, mapStateToProps, mapDispatchToProps} from "./store"
+import {ExternReduxState, mapStateToProps, mapDispatchToProps} from "../redux/store"
 import {Helmet} from "react-helmet"
 
-import ComHeaer from "./com_header";
+import ComHeaer from "./component/com_header";
 
-type ProjectDetailProps = {
+type ProjectAddProps = {
 } & ExternReduxState;
 
-class ProjectDetail extends Component<ProjectDetailProps>{
-    constructor(props:ProjectDetailProps){
+class ProjectAdd extends Component<ProjectAddProps>{
+    constructor(props:ProjectAddProps){
         super(props);
     }
     render()
     {
         return(
             <div>
-                <Helmet title="ProjecDetail" />
+                <Helmet title="Projec Add" />
                 <body>
                     <header>
                         <ComHeaer/>
                     </header>
                     <main>
-                        <h1>ProjectDetail</h1>
+                        <h1>ProjectAdd</h1>
                         <h1>sampledata={this.props.sample}</h1>
                     </main>
                 </body>
@@ -31,4 +31,4 @@ class ProjectDetail extends Component<ProjectDetailProps>{
     }
 }
 
-export default connect(mapStateToProps)(ProjectDetail);
+export default connect(mapStateToProps)(ProjectAdd);

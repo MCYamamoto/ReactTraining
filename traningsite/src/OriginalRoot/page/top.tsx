@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import {Header, Button} from "semantic-ui-react"
 import {connect,} from 'react-redux'
 import {Link} from "react-router-dom"
-import {ExternReduxState, mapStateToProps, mapDispatchToProps} from "./store"
+import {ExternReduxState, mapStateToProps, mapDispatchToProps} from "../redux/store"
 import {Helmet} from "react-helmet"
-import "./top.scss"
+import "./../css/top.scss"
 
-import ComHeaer from "./com_header";
+import ComHeaer from "./component/com_header";
 
 type TopProps = {
 } & ExternReduxState;
@@ -46,17 +46,18 @@ export class TopPage extends Component<TopProps, TopState>{
         // console.log(this.state.state_sample)
         return(
             <>
-                <Helmet title="ProjectList" />
+                <Helmet title="Project List" />
                 <body>
                     <header>
                         <ComHeaer/>
                     </header>
                     <main>
-                        <h1>{this.props.sample}</h1>
+                        {/* 下記は動作テスト用なので削除 */}
+                        {/* <h1>{this.props.sample}</h1>
                         <h1>{this.state.state_sample}</h1>
                         <Button onClick={this.Click}>OK</Button>
                         <Button onClick={this.Click2}>OK2</Button>
-                        <Button onClick={this.Click3}>OK3</Button>
+                        <Button onClick={this.Click3}>OK3</Button> */}
                     </main>
                 </body>
             </>

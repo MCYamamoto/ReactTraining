@@ -1,7 +1,7 @@
 //REDUX使用方法確認。(未使用)
 
-import {TopPage} from "../top"
-import {ActionType, ReduxState, ReduxAction} from "../store"
+import {TopPage} from "../page/top"
+import {ActionType, ReduxState, ReduxAction} from "../redux/store"
 import {connect} from "react-redux"
 import {Dispatch} from "redux"
 
