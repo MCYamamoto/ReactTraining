@@ -1,7 +1,7 @@
 //REDUX使用方法確認。(未使用)
 
-import {Home} from "./home"
-import {ActionType, ReduxState, ReduxAction} from "./store"
+import {TopPage} from "../top"
+import {ActionType, ReduxState, ReduxAction} from "../store"
 import {connect} from "react-redux"
 import {Dispatch} from "redux"
 
@@ -26,4 +26,4 @@ export function SampleAction(value?:number):ReduxAction
     }
 }
 
-export default connect(mapStateToProps,  mapDispatchToProps)(Home);
+export default connect(mapStateToProps,  mapDispatchToProps)(TopPage);

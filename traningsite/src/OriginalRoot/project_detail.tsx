@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import {connect,} from 'react-redux'
 import {ExternReduxState, mapStateToProps, mapDispatchToProps} from "./store"
+import {Helmet} from "react-helmet"
+
+import ComHeaer from "./com_header";
 
 type ProjectDetailProps = {
 } & ExternReduxState;
@@ -13,8 +16,16 @@ class ProjectDetail extends Component<ProjectDetailProps>{
     {
         return(
             <div>
-                <h1>ProjectDetail</h1>
-                <h1>sampledata={this.props.sample}</h1>
+                <Helmet title="ProjecDetail" />
+                <body>
+                    <header>
+                        <ComHeaer/>
+                    </header>
+                    <main>
+                        <h1>ProjectDetail</h1>
+                        <h1>sampledata={this.props.sample}</h1>
+                    </main>
+                </body>
             </div>
         );
     }

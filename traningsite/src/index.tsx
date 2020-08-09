@@ -11,11 +11,12 @@ import { Provider } from 'react-redux'
 import Store from "./OriginalRoot/store"
 
 //各ページ
-import Home from "./OriginalRoot/home"
-// import Home from "./OriginalRoot/Container"
+import TopPage from "./OriginalRoot/top"
 import RouteFail from "./OriginalRoot/route_faire"
 import ProjectDetail from "./OriginalRoot/project_detail"
-import {Home2} from "./OriginalRoot/home2"
+
+// import Home from "./OriginalRoot/Container"
+// import {Home2} from "./OriginalRoot/unuse/home2"
 
 ReactDOM.render(
   <React.StrictMode>
@@ -23,7 +24,7 @@ ReactDOM.render(
     <Provider store={Store}>
       <Router>
         <Switch>
-          <Route exact path="/" component={Home}></Route>
+          <Route exact path="/" component={TopPage}></Route>
           <Route path="/projectdetail" component={ProjectDetail}></Route>
           <Route component={RouteFail} />
         </Switch>

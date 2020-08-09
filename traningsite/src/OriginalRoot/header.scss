@@ -1,0 +1,33 @@
+header{
+    width: 100%;
+    padding: 30px 4% 10px;
+    background-color: #4b4b4b;
+    // position: fixed;
+    position: sticky;   //headerの高さが変わっても下のコンテナ位置がずれてくれる
+    top: 0;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+
+    .header-link{
+        text-decoration: none;
+        color: #ffffff;
+    }
+    h1 {
+        margin: 0; padding: 0;
+        font-size: 20px;
+    }
+    ul {
+        list-style: none;
+        display: flex
+    }
+    li {
+        margin: 0 0 0 15px;
+        font-size:14px;
+        // border: solid;
+     }
+     nav{
+         margin:0 0 0 auto;
+     }
+}
+

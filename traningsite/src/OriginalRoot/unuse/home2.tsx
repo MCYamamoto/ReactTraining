@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {ExternReduxState, mapStateToProps, mapDispatchToProps} from "./store"
+import {ExternReduxState, mapStateToProps, mapDispatchToProps} from "../store"
 
 interface Home2Props{
 
