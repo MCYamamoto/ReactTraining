@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import {connect,} from 'react-redux'
-import {ExternReduxState, mapStateToProps, mapDispatchToProps} from "../redux/store"
 import {Helmet} from "react-helmet"
 
 import ComHeaer from "./component/com_header";
 
-type ProjectAddProps = {
-} & ExternReduxState;
+interface OwnProps {
+};
 
-class ProjectAdd extends Component<ProjectAddProps>{
+type ProjectAddProps = OwnProps;
+
+export default class ProjectAdd extends Component<ProjectAddProps>{
     constructor(props:ProjectAddProps){
         super(props);
     }
@@ -23,12 +24,9 @@ class ProjectAdd extends Component<ProjectAddProps>{
                     </header>
                     <main>
                         <h1>ProjectAdd</h1>
-                        <h1>sampledata={this.props.sample}</h1>
                     </main>
                 </body>
             </div>
         );
     }
 }
-
-export default connect(mapStateToProps)(ProjectAdd);

@@ -11,7 +11,7 @@ import { Provider } from 'react-redux'
 import Store from "./OriginalRoot/redux/store"
 
 //各ページ
-import TopPage from "./OriginalRoot/page/top"
+import TopPage from "./OriginalRoot/page/top_page_container"
 import RouteFail from "./OriginalRoot/page/route_faire"
 import ProjectDetail from "./OriginalRoot/page/project_detail"
 import ProjectAdd from "./OriginalRoot/page/project_add"
