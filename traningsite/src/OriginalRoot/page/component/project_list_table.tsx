@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import "../../css/project_list_table.scss"
 
+//FireBase
+import firebase, {db} from "../../db/firebase"
+
 //コンテナ
 import {ProjectListTableReduxState, ProjectListTableReduxAction} from "./project_list_table_container"
 
@@ -12,11 +15,6 @@ enum eViewType{
     VIEW_TYPE_LIST="LIST",
     VIEW_TYPE_GRID="GRID"
 }
-interface OwnState {
-    ViewType:eViewType
-}
-
-type ProjectListTableProps = OwnProps & ProjectListTableReduxState & ProjectListTableReduxAction;
 
 interface ProjectDataObj {
     number:number,      // 案件番号
@@ -25,6 +23,14 @@ interface ProjectDataObj {
     startDate:string,     // 開始日
     endDate:string        // 期限
 }
+
+interface OwnState {
+    ViewType:eViewType
+    data:ProjectDataObj[]
+}
+
+type ProjectListTableProps = OwnProps & ProjectListTableReduxState & ProjectListTableReduxAction;
+
 export default class ProjectListTable extends Component<ProjectListTableProps, OwnState>{
     gridStyle = {
         display:"grid",
@@ -38,34 +44,58 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
         padding:"10px"
     }
 
-    arrProjectData:ProjectDataObj[] = [
-        {number:1,name:"テストプロジェクト1", srcCompany:"モルト1", startDate:"2020/07/01", endDate:"2020/08/31"},
-        {number:2,name:"テストプロジェクト2", srcCompany:"モルト2", startDate:"2020/08/01", endDate:"2020/08/31"},
-        {number:3,name:"テストプロジェクト3", srcCompany:"モルト3", startDate:"2020/09/01", endDate:"2020/09/31"}
-    ]
-
     constructor(props:ProjectListTableProps) 
     {
         super(props);
-        this.Click = this.Click.bind(this);
+
         this.DispGrid = this.DispGrid.bind(this);
         this.DispList = this.DispList.bind(this);
 
         this.state = {
-            ViewType:eViewType.VIEW_TYPE_LIST
+            ViewType:eViewType.VIEW_TYPE_LIST,
+            data:[]
         }
+
+        //DBからデータ取得
+        this.getFireData();
     }
-    Click()
-    {
-        this.props.headerHeightaction(100);
+    
+            
+    // Firebaseからのデータ取得
+    getFireData() {
+        let docRef = db.collection("projectlist").doc("list");
+        let self = this;
+        const doc = docRef.get()
+        .then(res => {
+            //正常終了時
+            let getdata = res.data();
+            if(getdata != null)
+            {
+                // console.log(getdata.data);
+                self.setState({data:getdata.data})    
+            }
+        })
+        .catch(error => {
+            //異常終了時
+            //alert(error);
+        });
+
+        // this.setState({
+        //     data: doc.data()
+        // });
     }
+    
+    //グリッド表示
     DispGrid(){
         this.setState((state)=>({ViewType:eViewType.VIEW_TYPE_GRID}))
     }
+
+    //リスト表示
     DispList()
     {
         this.setState((state)=>({ViewType:eViewType.VIEW_TYPE_LIST}))
     }
+
     render(){
         let ViewTypeBtnStyle = 
         {
@@ -83,7 +113,7 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
                 </tr>
             </thead>
             <tbody>
-                {this.arrProjectData.map((value)=>
+                {this.state.data.map((value)=>
                     <tr>
                         <td>{value.number}</td>
                         <td>{value.name}</td>
@@ -97,7 +127,7 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
         )
         let ViewLGrid = (
                 <div style={this.gridStyle}>
-                    {this.arrProjectData.map((value)=>
+                    {this.state.data.map((value)=>
                         <div style={this.gridItemStyle}>
                             <p>{"案件番号　　:"}{value.number}</p>
                             <p>{"案件名　　　:"}{value.name}</p>

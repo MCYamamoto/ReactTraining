@@ -15,7 +15,7 @@ import PrivateRoute from "./OriginalRoot/page/component/private_Route_container"
 //各ページ
 import TopPage from "./OriginalRoot/page/top_page_container"
 import RouteFail from "./OriginalRoot/page/route_faire"
-import LoginPage from "./OriginalRoot/page/login_page"
+import LoginPage from "./OriginalRoot/page/login_page_container"
 import ProjectDetail from "./OriginalRoot/page/project_detail"
 import ProjectAdd from "./OriginalRoot/page/project_add"
 

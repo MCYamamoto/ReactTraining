@@ -135,4 +135,4 @@ yarn add @types/firebase
 
 ### 認証部分
 
-https://qiita.com/dyoshikawa/items/404402e4e8622d6811f3
+https://qiita.com/zaburo/items/801bd288cec47bd28764

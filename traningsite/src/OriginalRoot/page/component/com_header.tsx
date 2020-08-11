@@ -1,17 +1,18 @@
 // 各ページで表示する統一的なヘッダーを作成する。
 
 import React, { Component } from 'react'
-import {connect,} from 'react-redux'
 import {Link} from "react-router-dom"
 import {} from "semantic-ui-react"
 import "../../css/com_header.scss"
-
+import firebase from "./../../db/firebase"
 //コンテナ
-import {ComHeaderReduxState} from "./com_header_container"
+import {ComHeaderReduxState, ComHeaderReduxAction} from "./com_header_container"
 
 interface OwnProps
 {
     naviEnable?:boolean;
+    history?:any;
+    location?:any;
 }
 
 interface DefaultProps
@@ -19,7 +20,7 @@ interface DefaultProps
     naviEnable:boolean;
 }
 
-type ComHeaerProps = OwnProps & ComHeaderReduxState;
+type ComHeaerProps = OwnProps & ComHeaderReduxState & ComHeaderReduxAction;
 
 export default class ComHeaer extends Component<ComHeaerProps>
 {
@@ -45,6 +46,22 @@ export default class ComHeaer extends Component<ComHeaerProps>
     }
     constructor(props:ComHeaerProps){
         super(props);
+
+        //バインド
+        this.SignOutClick = this.SignOutClick.bind(this);
+    }
+    //サインアウト
+    SignOutClick()
+    {
+        //FireBase SignOut
+        firebase.auth().signOut();
+        //REDUX ログイン状態解除
+        this.props.loginaction(false);
+        // //頁移動
+        // if(this.props.history != null)
+        // {
+        //     this.props.history.push("/");
+        // }
     }
     render()
     {
@@ -59,6 +76,7 @@ export default class ComHeaer extends Component<ComHeaerProps>
                 <nav className="header-nav">
                     <ul>
                         <li><Link className="header-link" to="/add">NewProject</Link></li>
+                        <li><Link className="header-link" to="/" onClick={this.SignOutClick}>SignOut</Link></li>
                     </ul>
                 </nav>
             }
