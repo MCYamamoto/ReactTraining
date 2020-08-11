@@ -6,7 +6,7 @@ import {Helmet} from "react-helmet"
 import "./../css/top.scss"
 
 // コンポーネント
-import ComHeaer from "./component/com_header";
+import ComHeaer from "./component/com_header_container";
 import ProjectListTable from "./component/project_list_table_container";
 
 //コンテナ

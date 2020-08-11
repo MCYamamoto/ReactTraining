@@ -6,8 +6,28 @@ import {Link} from "react-router-dom"
 import {} from "semantic-ui-react"
 import "../../css/com_header.scss"
 
-class ComHeaer extends Component
+//コンテナ
+import {ComHeaderReduxState} from "./com_header_container"
+
+interface OwnProps
 {
+    naviEnable?:boolean;
+}
+
+interface DefaultProps
+{
+    naviEnable:boolean;
+}
+
+type ComHeaerProps = OwnProps & ComHeaderReduxState;
+
+export default class ComHeaer extends Component<ComHeaerProps>
+{
+    // Propsのデフォルト値
+    public static defaultProps: DefaultProps = {
+        naviEnable: true  // デフォルトはnav有効
+    };
+
     //別のスタイル設定方法(今回は使用してない)
     linkStyle = {
         textDecoration: "none",
@@ -23,22 +43,45 @@ class ComHeaer extends Component
         fontSize:"14px",
         display: "flex"
     }
-    componentDidMount() {
-    }
-
-    constructor(){
-        super({});
+    constructor(props:ComHeaerProps){
+        super(props);
     }
     render()
     {
+        let DispNavi;
+        if(this.props.naviEnable === true)
+        {
+        // NAV表示あり
+            if(this.props.login === true)
+            {
+                //ログイン済み
+                DispNavi = 
+                <nav className="header-nav">
+                    <ul>
+                        <li><Link className="header-link" to="/add">NewProject</Link></li>
+                    </ul>
+                </nav>
+            }
+            else
+            {
+                //未ログイン
+                DispNavi = 
+                <nav className="header-nav">
+                    <ul>
+                        <li><Link className="header-link" to="/login">Login</Link></li>
+                    </ul>
+                </nav>
+            }
+        }
+        else
+        {
+            // NAV表示なし
+            DispNavi = <nav className="header-nav"></nav>
+        }
         return (
             <>
                 <h1><Link className="header-link" to="/">Project List</Link></h1>
-                <nav className="header-nav">
-                    <ul>
-                        <li><Link className="header-link" to="/add">ADD PROJECT</Link></li>
-                    </ul>
-
+                {DispNavi}
                     {/* 今回は使わないスタイル設定 */}
                     {/* <ul style={this.liStyle}>
                         <li style={this.ulStyle}><Link style={this.linkStyle} to="#">ABOUT</Link></li>
@@ -46,10 +89,7 @@ class ComHeaer extends Component
                         <li style={this.ulStyle}><Link style={this.linkStyle} to="#">COMPANY</Link></li>
                         <li style={this.ulStyle}><Link style={this.linkStyle} to="#">CONTACT</Link></li>
                     </ul> */}
-                </nav>
             </>        
         );
     }
 }
-
-export default connect()(ComHeaer);

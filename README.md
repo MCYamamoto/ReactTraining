@@ -23,10 +23,11 @@ SPAにする。
 - ReactRouter
 - SCSS
 - git
+- AWS S3(静的配置、DB)
 
 ## これから使用する予定の技術
 - Nodejs
-- AWS or FireBase
+- FireBase
 
 ## 確認する必要があること
 - テストの方法
@@ -102,3 +103,36 @@ yarn add @types/redux @types/react-redux
 ※typescript用のものもインストールする必要あり。
 </pre>
 
+[AWS S3]
+下記を参考に環境＋デプロイまで実施した。
+
+https://joppot.info/2018/11/26/4303
+
+Windowsだったので、Keyの登録の所は下記を参考にした。
+
+https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-quickstart.html
+
+Windows10では、下記にキーの情報が保存されていた。
+<pre>
+C:\Users\{username}\.aws
+</pre>
+
+[FireBase]
+メールアドレスでの認証とDBサーバはFireBaseで行う
+
+### 環境構築手順
+- FireBaseにログイン
+- プロジェクト作成
+- DB作成
+- 認証メールアドレス追加
+- アプリ作成を選択し、config情報出力
+
+### install方法
+<pre>
+yarn add firebase
+yarn add @types/firebase
+</pre>
+
+### 認証部分
+
+https://qiita.com/dyoshikawa/items/404402e4e8622d6811f3

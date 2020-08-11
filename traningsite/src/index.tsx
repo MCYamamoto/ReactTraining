@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'semantic-ui-css/semantic.min.css'
 import { BrowserRouter as Router, Route ,Switch} from "react-router-dom";  //SPA用
@@ -10,9 +9,13 @@ import { Provider } from 'react-redux'
 //REDUX関連
 import Store from "./OriginalRoot/redux/store"
 
+//ログイン中か判断して、飛ばす頁を変更するコンポーネント
+import PrivateRoute from "./OriginalRoot/page/component/private_Route_container"
+
 //各ページ
 import TopPage from "./OriginalRoot/page/top_page_container"
 import RouteFail from "./OriginalRoot/page/route_faire"
+import LoginPage from "./OriginalRoot/page/login_page"
 import ProjectDetail from "./OriginalRoot/page/project_detail"
 import ProjectAdd from "./OriginalRoot/page/project_add"
 
@@ -21,15 +24,17 @@ import ProjectAdd from "./OriginalRoot/page/project_add"
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <Home2 /> stateのお試しのため、未使用*/}
     <Provider store={Store}>
       <Router>
         <Switch>
+          {/* ルート画面 */}
           <Route exact path="/" component={TopPage}></Route>
+          {/* ログイン画面 */}
+          <Route path="/login" component={LoginPage}></Route>
           {/* プロジェクト詳細画面 */}
-          <Route path="/detail" component={ProjectDetail}></Route>
+          <PrivateRoute path="/detail" component={ProjectDetail}></PrivateRoute>
           {/* プロジェクト新規登録画面 */}
-          <Route path="/add" component={ProjectAdd}></Route>
+          <PrivateRoute path="/add" component={ProjectAdd}></PrivateRoute>
           <Route component={RouteFail} />
         </Switch>
       </Router>
