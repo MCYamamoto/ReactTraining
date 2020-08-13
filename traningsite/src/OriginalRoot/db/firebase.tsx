@@ -170,4 +170,15 @@ export function updateDBProjectList(docID:string, add_data:ProjectDataObj,resolv
     });
 }
 
+//Firebaseのデータ削除
+export function deleteDBProjectList(docID:string,resolvAction:(res:any)=>void, errAction:(err:any)=>void)
+{
+    dbColRef.doc(docID).delete()
+    .then((res)=>{
+        resolvAction(res);
+    }).catch((err)=>{
+        errAction(err);
+    });    
+}
+
 export default firebase;

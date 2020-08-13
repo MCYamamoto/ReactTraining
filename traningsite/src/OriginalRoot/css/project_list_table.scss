@@ -4,12 +4,12 @@ table{
     width: 100%;
   }
   
-  table tr{
+  table tbody tr{
     border-bottom: solid 1px #eee;
     cursor: pointer;
   }
   
-  table tr:hover{
+  table tbody tr:hover{
     background-color: #d4f0fd;
   }
   
@@ -26,3 +26,10 @@ table{
     padding-left: 30px;
   }
   
+.main-ProjectListTable-Grid
+{
+  cursor: pointer;
+  :hover{
+    background-color: #d4f0fd;   
+  }
+}

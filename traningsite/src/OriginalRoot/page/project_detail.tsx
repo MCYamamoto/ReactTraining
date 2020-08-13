@@ -5,7 +5,7 @@ import {parse} from 'query-string';
 import ComHeaer from "./component/com_header_container";
 
 //FireBase
-import {ProjectDataObj, getDBProjectData, updateDBProjectList} from "../db/firebase"
+import {ProjectDataObj, getDBProjectData, updateDBProjectList, deleteDBProjectList} from "../db/firebase"
 
 interface OwnProps{
     history:any;
@@ -58,15 +58,21 @@ export default class ProjectDetail extends Component<ProjectDetailProps, Project
         this.handleendDateChange = this.handleendDateChange.bind(this);
         //更新ボタン押下
         this.UpdateClick = this.UpdateClick.bind(this);
+        //削除ボタン押下
+        this.DeleteClick = this.DeleteClick.bind(this);
 
         //DB取得時アクション
         this.getDBResolvAction = this.getDBResolvAction.bind(this);
         this.getDBErrAction = this.getDBErrAction.bind(this);
         
-        //DB登録時アクション
+        //DB更新時アクション
         this.updateDBResolvAction = this.updateDBResolvAction.bind(this);
         this.updateDBErrAction = this.updateDBErrAction.bind(this);
         
+        //DB削除時アクション
+        this.deleteDBResolvAction = this.deleteDBResolvAction.bind(this);
+        this.deleteDBErrAction = this.deleteDBErrAction.bind(this);
+
         //DBから情報取得
         getDBProjectData(this.state.docID, this.getDBResolvAction, this.getDBErrAction);
     }
@@ -135,17 +141,12 @@ export default class ProjectDetail extends Component<ProjectDetailProps, Project
         alert(err);
     }    
 
-    //DB登録成功時のアクション
+    //DB更新成功時のアクション
     updateDBResolvAction(res:any)
     {
         this.setState({loading:LOADING_STATE.LOADING_COMP});
-        //登録後、Topに移動
-        if(this.props.history != null)
-        {
-            this.props.history.push("/");
-        }
     }
-    //DB登録失敗時のアクション
+    //DB更新失敗時のアクション
     updateDBErrAction(err:any)
     {
         this.setState({loading:LOADING_STATE.LOADING_COMP});
@@ -154,10 +155,36 @@ export default class ProjectDetail extends Component<ProjectDetailProps, Project
     //更新ボタン押下
     UpdateClick()
     {
-        //画面を登録中に変更
+        //画面を更新中に変更
         this.setState({loading:LOADING_STATE.LOADING_WAIT});
         //DB更新
         updateDBProjectList(this.state.docID, this.state.add_data, this.updateDBResolvAction, this.updateDBErrAction);
+    }
+
+    //DB削除成功時のアクション
+    deleteDBResolvAction(res:any)
+    {
+        this.setState({loading:LOADING_STATE.LOADING_COMP});
+        //登録後、Topに移動
+        if(this.props.history != null)
+        {
+            this.props.history.push("/");
+        }
+    }
+    //DB削除失敗時のアクション
+    deleteDBErrAction(err:any)
+    {
+        this.setState({loading:LOADING_STATE.LOADING_COMP});
+        alert(err);
+    }    
+
+    //削除ボタン押下
+    DeleteClick()
+    {
+        //画面を更新中に変更
+        this.setState({loading:LOADING_STATE.LOADING_WAIT});
+        //DB更新
+        deleteDBProjectList(this.state.docID, this.deleteDBResolvAction, this.deleteDBErrAction);
     }
     
     render()
@@ -178,7 +205,9 @@ export default class ProjectDetail extends Component<ProjectDetailProps, Project
                     <Input type="text" name="startDate" id="lstartDate" placeholder="開始日" onChange={this.handlestartDateChange} value={this.state.add_data.startDate}/><br />
                     <Label for="lendDate">期限:</Label>
                     <Input type="text" name="endDate" id="lendDate" placeholder="期限" onChange={this.handleendDateChange} value={this.state.add_data.endDate}/><br />
-                    <Button onClick={this.UpdateClick}>Update</Button>
+                    <hr />
+                    <Button onClick={this.UpdateClick}>Update</Button><br /><br />
+                    <Button onClick={this.DeleteClick}>Delete</Button>
                 </div>
             );
         }

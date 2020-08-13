@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import "../../css/project_list_table.scss"
 
 //FireBase
-import {ProjectDataObj, getProjectDataObj, getDBProjectList} from "../../db/firebase"
+import {getProjectDataObj, getDBProjectList} from "../../db/firebase"
 
 //コンテナ
 // import {ProjectListTableReduxState, ProjectListTableReduxAction} from "./project_list_table_container"
@@ -42,9 +42,15 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
         super(props);
 
         //バインド
+        //ボタンクリック
         this.DispGrid = this.DispGrid.bind(this);
         this.DispList = this.DispList.bind(this);
-        this.SelectProject = this.SelectProject.bind(this);
+
+        //テーブル選択
+        this.SelectProjectList = this.SelectProjectList.bind(this);
+        this.SelectProjectGrid = this.SelectProjectGrid.bind(this);
+
+        //DB操作
         this.getDBResolvAction = this.getDBResolvAction.bind(this);
         this.getDBErrAction = this.getDBErrAction.bind(this);
 
@@ -64,16 +70,26 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
     {
         this.setState((state)=>({ViewType:eViewType.VIEW_TYPE_LIST}))
     }
-    //プロジェクト選択
-    SelectProject(event: React.MouseEvent<HTMLTableRowElement, MouseEvent>)
+    //プロジェクト選択(リスト)
+    SelectProjectList(event: React.MouseEvent<HTMLTableRowElement, MouseEvent>)
     {
         if(event.currentTarget)  
         {
             let currentIndex = event.currentTarget.sectionRowIndex;
-            console.log(currentIndex);
             if(currentIndex >= 0 && currentIndex < this.state.lists.length)
             {
-                console.log(this.state.lists[currentIndex]);
+                this.props.history.push("/detail?id="+this.state.lists[currentIndex].docID);
+            }
+        }
+    }
+    //プロジェクト選択(グリッド)
+    SelectProjectGrid(event: React.MouseEvent<HTMLDivElement, MouseEvent>)
+    {
+        if(event.currentTarget)  
+        {
+            let currentIndex = Number(event.currentTarget.dataset.item);
+            if(currentIndex >= 0 && currentIndex < this.state.lists.length)
+            {
                 this.props.history.push("/detail?id="+this.state.lists[currentIndex].docID);
             }
         }
@@ -110,7 +126,7 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
             </thead>
             <tbody>
                 {this.state.lists.map((value)=>
-                    <tr onClick={this.SelectProject} key={value.data.number}>
+                    <tr onClick={this.SelectProjectList} key={value.data.number}>
                         <td>{value.data.number}</td>
                         <td>{value.data.name}</td>
                         <td>{value.data.srcCompany}</td>
@@ -122,9 +138,9 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
         </table>
         )
         let ViewLGrid = (
-                <div style={this.gridStyle}>
-                    {this.state.lists.map((value)=>
-                        <div style={this.gridItemStyle}>
+                <div style={this.gridStyle} className="main-ProjectListTable-Grid">
+                    {this.state.lists.map((value, index)=>
+                        <div data-item={index} style={this.gridItemStyle} onClick={this.SelectProjectGrid}>
                             <p>{"案件番号　　:"}{value.data.number}</p>
                             <p>{"案件名　　　:"}{value.data.name}</p>
                             <p>{"発注元会社名:"}{value.data.srcCompany}</p>
