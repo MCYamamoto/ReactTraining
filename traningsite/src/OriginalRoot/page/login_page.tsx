@@ -4,7 +4,7 @@ import {Helmet} from "react-helmet"
 import {Label, Button, Input} from "semantic-ui-react"
 import firebase from '../db/firebase';
 // CSS
-
+import "./../css/login.scss"
 
 // コンポーネント
 import ComHeaer from "./component/com_header_container";
@@ -89,20 +89,27 @@ export default class LoginPage extends Component<LoginPageProps, LoginPageState>
         if(this.state.loading === false)
         {
             dispMain = (
-                <div>
-                    <Label for="lmail">Mail Address:</Label>
-                    <Input type="text" name="mail" id="lmail" placeholder="Email" onChange={this.handleMailChange}/><br />
-                    <Label for="lpass">Paassword:</Label>
-                    <Input type="text" name="pass" id="lpass" placeholder="Password" onChange={this.handlePasswordChange}/><br />
-                    <Button onClick={this.LoginClick}>Submit</Button>
+                <div className="loginpage--main">
+                    <h2>認証</h2>
+                    <div className="input">
+                        <Label className="label" for="lmail">Mail Address:</Label>
+                        <Input type="text" name="mail" id="lmail" placeholder="Email" onChange={this.handleMailChange}/>
+                    </div>
+                    <br />
+                    <div className="input">
+                        <Label className="label" for="lpass">Paassword:</Label>
+                        <Input type="text" name="pass" id="lpass" placeholder="Password" onChange={this.handlePasswordChange}/>
+                    </div>
+                    <br />
+                    <Button onClick={this.LoginClick}>認証</Button>
                 </div>
             );
         }
         else
         {
             dispMain = (
-                <div>
-                    <h2>loading...</h2>
+                <div className="loginpage--main">
+                    <h2>Loading...</h2>
                 </div>
             );
         }

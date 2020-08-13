@@ -5,3 +5,21 @@ main{
     position: sticky;
     top:0;
 }
+
+.top--main--big-bg{
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;;
+}
+
+#home{
+    background-image: url(../../image/pakutaso_com_flower.png);
+    min-height: 100vh;;
+    color: #4b4b4b;
+}
+
+.top-main-title{
+    text-align: center;
+    padding-top:10%;
+    font-size:22px;
+}

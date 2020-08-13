@@ -32,7 +32,10 @@ export default class TopPage extends Component<TopPageProps>{
                     <header>
                         <ComHeaer/>
                     </header>
-                    <main>
+                    <main id="home" className="top--main--big-bg">
+                        <div className="top-main-title">
+                            <h2>株式会社モルトカリーナの案件管理</h2>
+                        </div>
                     </main>
                 </body>
             </>

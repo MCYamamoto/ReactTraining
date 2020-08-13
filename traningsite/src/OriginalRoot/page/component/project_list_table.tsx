@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import "../../css/project_list_table.scss"
 
+//画像
+import logoGridView from "./../../../image/gridDisp.png"
+import logoListView from "./../../../image/listDisp.png"
 //FireBase
 import {getProjectDataObj, getDBProjectList} from "../../db/firebase"
 
@@ -18,6 +21,7 @@ enum eViewType{
 }
 
 interface OwnState {
+    loading:boolean;
     ViewType:eViewType;
     lists:getProjectDataObj[];
 }
@@ -34,7 +38,7 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
         marginBottom:"50px",
     }
     gridItemStyle = {
-        border:"solid",
+        border:"solid 1px",
         padding:"10px"
     }
     constructor(props:ProjectListTableProps) 
@@ -55,9 +59,13 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
         this.getDBErrAction = this.getDBErrAction.bind(this);
 
         this.state = {
+            loading:true,
             ViewType:eViewType.VIEW_TYPE_LIST,
             lists:[]
         }
+
+        //DBからデータ取得
+        getDBProjectList("number", "desc", 10, "", "", this.getDBResolvAction, this.getDBErrAction);
     }
         
     //グリッド表示
@@ -98,66 +106,77 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
     getDBResolvAction(getdata:getProjectDataObj[])
     {
         this.setState({lists:getdata})    
+        this.setState({loading:false});
     }
     //DB取得失敗時のアクション
     getDBErrAction(err:any)
     {
-        //未ログインのため、何もしない。
-        //alert(err);
+        this.setState({loading:false});
+        alert(err);
     }
     render(){
-        //DBからデータ取得
-        getDBProjectList("number", "desc", 10, "", "", this.getDBResolvAction, this.getDBErrAction);
-
-        let ViewTypeBtnStyle = 
+        if(this.state.loading === false)
         {
-            display:"flex"
-        }
-        let ViewList = (
-        <table>
-            <thead>
-                <tr>
-                    <th>案件番号</th>
-                    <th>案件名</th>
-                    <th>発注元会社名</th>
-                    <th>開始日</th>
-                    <th>期限</th>
-                </tr>
-            </thead>
-            <tbody>
-                {this.state.lists.map((value)=>
-                    <tr onClick={this.SelectProjectList} key={value.data.number}>
-                        <td>{value.data.number}</td>
-                        <td>{value.data.name}</td>
-                        <td>{value.data.srcCompany}</td>
-                        <td>{value.data.startDate}</td>
-                        <td>{value.data.endDate}</td>
+            let ViewTypeBtnStyle = 
+            {
+                display:"flex",
+                justifyContent: "flex-end",
+                marginRight:"50px"
+            }
+            let ViewList = (
+            <table>
+                <thead>
+                    <tr>
+                        <th className="data-number">案件番号</th>
+                        <th className="data-name">案件名</th>
+                        <th className="data-srcCompay">発注元会社名</th>
+                        <th className="data-startDate">開始日</th>
+                        <th className="data-endDate">期限</th>
                     </tr>
-                )}
-            </tbody>
-        </table>
-        )
-        let ViewLGrid = (
-                <div style={this.gridStyle} className="main-ProjectListTable-Grid">
-                    {this.state.lists.map((value, index)=>
-                        <div data-item={index} style={this.gridItemStyle} onClick={this.SelectProjectGrid}>
-                            <p>{"案件番号　　:"}{value.data.number}</p>
-                            <p>{"案件名　　　:"}{value.data.name}</p>
-                            <p>{"発注元会社名:"}{value.data.srcCompany}</p>
-                            <p>{"開始日　　　:"}{value.data.startDate}</p>
-                            <p>{"期限　　　　:"}{value.data.endDate}</p>
-                        </div> 
+                </thead>
+                <tbody>
+                    {this.state.lists.map((value)=>
+                        <tr onClick={this.SelectProjectList} key={value.data.number}>
+                            <td className="data-number">{value.data.number}</td>
+                            <td className="data-name">{value.data.name}</td>
+                            <td className="data-srcCompay">{value.data.srcCompany}</td>
+                            <td className="data-startDate">{value.data.startDate}</td>
+                            <td className="data-endDate">{value.data.endDate}</td>
+                        </tr>
                     )}
+                </tbody>
+            </table>
+            )
+            let ViewLGrid = (
+                    <div style={this.gridStyle} className="main-ProjectListTable-Grid">
+                        {this.state.lists.map((value, index)=>
+                            <div data-item={index} style={this.gridItemStyle} onClick={this.SelectProjectGrid}>
+                                <p>{"案件番号　　:"}{value.data.number}</p>
+                                <p>{"案件名　　　:"}{value.data.name}</p>
+                                <p>{"発注元会社名:"}{value.data.srcCompany}</p>
+                                <p>{"開始日　　　:"}{value.data.startDate}</p>
+                                <p>{"期限　　　　:"}{value.data.endDate}</p>
+                            </div> 
+                        )}
+                    </div>
+            )
+            return(
+                <div>
+                    <div style={ViewTypeBtnStyle}>
+                        <input className="project-list--main--input" type="image" name="DispList" src={logoListView} alt="ListView" onClick={this.DispList} />
+                        <input className="project-list--main--input" type="image" name="DispGrid" src={logoGridView} alt="GridView" onClick={this.DispGrid} />
+                    </div> 
+                    {this.state.ViewType===eViewType.VIEW_TYPE_LIST?ViewList:ViewLGrid}
                 </div>
-        )
-        return(
-            <div>
-                <div style={ViewTypeBtnStyle}>
-                    <button onClick={this.DispGrid}>Grid</button>
-                    <button onClick={this.DispList}>List</button>
-                </div> 
-                {this.state.ViewType===eViewType.VIEW_TYPE_LIST?ViewList:ViewLGrid}
-            </div>
-        );
+            );    
+        }
+        else
+        {
+            return(
+                <div className="project-list--main--loading">
+                    <h2>Loading...</h2>
+                </div>
+            );    
+        }
     }
 }

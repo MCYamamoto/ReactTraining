@@ -1,3 +1,17 @@
+.project-list--main--input
+{
+  margin: 5px;    
+}
+
+.project-list--main--loading
+{
+  text-align: center;
+
+  h2{
+      margin-top:1%;
+  }
+}
+
 table{
     border-collapse: collapse;
     border-spacing: 0;
@@ -14,11 +28,34 @@ table{
   }
   
   table th,table td{
-    text-align: center;
-    width: 25%;
+    text-align: left;
+    // width: 20%;
     padding: 15px 0;
   }
   
+
+  .data-number
+  {
+    padding-left:5vh;
+    width: 20%;
+  }
+  .data-name
+  {
+    width: 30%;
+  }
+  .data-srcCompay
+  {
+    width: 30%;
+  }
+  .data-startDate
+  {
+    width: 10%;
+  }
+  .data-endDate
+  {
+    width: 10%;
+  }
+
   table td.icon{
     background-size: 35px;
     background-position: left 5px center;
@@ -28,6 +65,7 @@ table{
   
 .main-ProjectListTable-Grid
 {
+  text-align:left;
   cursor: pointer;
   :hover{
     background-color: #d4f0fd;   

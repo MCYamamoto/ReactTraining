@@ -1,0 +1,23 @@
+@import url(base.scss);
+@import url(com_header.scss);
+
+.loginpage--main
+{
+    text-align: center;
+
+    h2{
+        margin-top:10%;
+    }
+    
+
+    .input{
+        display: inline-block;
+        text-align: left;
+        margin: 2px auto;
+    }
+
+    .label{
+        width:110px; 
+        text-align:right;
+    }
+}

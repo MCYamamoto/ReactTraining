@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import {Helmet} from "react-helmet"
 
 // CSS
-import "./../css/top.scss"
+import "./../css/project_list.scss"
 
 // コンポーネント
 import ComHeaer from "./component/com_header_container";
@@ -35,7 +35,10 @@ export default class ProjectList extends Component<ProjectListProps>{
                         <ComHeaer/>
                     </header>
                     <main>
-                        <ProjectListTable history={this.props.history} location={this.props.location}/>
+                        <div className="projectlist--page--main">
+                            <h2>登録案件一覧</h2>
+                            <ProjectListTable history={this.props.history} location={this.props.location}/>
+                        </div>
                     </main>
                 </body>
             </>

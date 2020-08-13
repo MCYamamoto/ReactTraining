@@ -1,7 +1,8 @@
 header{
     width: 100%;
     padding: 30px 4% 10px;
-    background-color: #4b4b4b;
+    // background-color: #4b4b4b;
+    background-color: #f8f8f8;
     // position: fixed;
     position: sticky;   //headerの高さが変わっても下のコンテナ位置がずれてくれる
     top: 0;
@@ -11,7 +12,8 @@ header{
 
     .header-link{
         text-decoration: none;
-        color: #ffffff;
+        // color: #ffffff;
+        color: #4b4b4b;
     }
     h1 {
         margin: 0; padding: 0;

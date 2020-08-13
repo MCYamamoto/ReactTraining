@@ -30,20 +30,20 @@ export default class ComHeaer extends Component<ComHeaerProps>
     };
 
     //別のスタイル設定方法(今回は使用してない)
-    linkStyle = {
-        textDecoration: "none",
-        color: "#4b4b4b"
-    }
-    ulStyle = {
-        listStyle: "none",
-        // margin: "0",
-        margin:"0 0 0 15px"
-    }
-    liStyle = {
-        // margin:"0 0 0 15px",
-        fontSize:"14px",
-        display: "flex"
-    }
+    // linkStyle = {
+    //     textDecoration: "none",
+    //     color: "#4b4b4b"
+    // }
+    // ulStyle = {
+    //     listStyle: "none",
+    //     // margin: "0",
+    //     margin:"0 0 0 15px"
+    // }
+    // liStyle = {
+    //     // margin:"0 0 0 15px",
+    //     fontSize:"14px",
+    //     display: "flex"
+    // }
     constructor(props:ComHeaerProps){
         super(props);
 
@@ -57,11 +57,6 @@ export default class ComHeaer extends Component<ComHeaerProps>
         firebase.auth().signOut();
         //REDUX ログイン状態解除
         this.props.loginaction(false);
-        // //頁移動
-        // if(this.props.history != null)
-        // {
-        //     this.props.history.push("/");
-        // }
     }
     render()
     {
