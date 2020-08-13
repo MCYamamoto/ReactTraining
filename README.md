@@ -12,6 +12,8 @@ SPAにする。
   scss  
   Router    
   Redux  
+### 2020/08/13
+- データ登録、表示できるようにした
 
 ## 使用している技術
 - JavaScript
@@ -24,10 +26,11 @@ SPAにする。
 - SCSS
 - git
 - AWS S3(静的配置、DB)
+- query-string
+- FireBase
 
 ## これから使用する予定の技術
 - Nodejs
-- FireBase
 
 ## 確認する必要があること
 - テストの方法
@@ -136,3 +139,16 @@ yarn add @types/firebase
 ### 認証部分
 
 https://qiita.com/zaburo/items/801bd288cec47bd28764
+
+### 登録参照部分
+
+https://qiita.com/zaburo/items/353524e4f54671c8eace
+
+[query-string]  
+urlからクエリパラメータを取り出してくれる。
+
+### install方法
+<pre>
+yarn add query-string
+yarn add @types/query-string
+</pre>

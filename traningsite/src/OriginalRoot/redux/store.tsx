@@ -4,14 +4,12 @@ import {ActionType, ReduxAction} from "./action"
 //ステート
 export type ReduxState = {
     sample:number;
-    headerHeight:number;
     login:boolean;
 }
 
 //デフォルト値
 const initialState:ReduxState = {
     sample:0,
-    headerHeight:0,
     login:false
 }
 
@@ -19,7 +17,6 @@ const initialState:ReduxState = {
 export const reducer = (state:ReduxState=initialState, action:ReduxAction)=>{
     let ret = {
         sample:state.sample,
-        headerHeight:state.headerHeight,
         login:state.login
     }
     
@@ -33,12 +30,6 @@ export const reducer = (state:ReduxState=initialState, action:ReduxAction)=>{
             else
             {
                 ret.sample = state.sample+action.data;
-            }
-            break;
-        case ActionType.HEADER_HEIGHT_CHG:
-            if(action.data != null)
-            {
-                ret.headerHeight = action.data;
             }
             break;
         case ActionType.LOGIN:

@@ -10,14 +10,16 @@ import { Provider } from 'react-redux'
 import Store from "./OriginalRoot/redux/store"
 
 //ログイン中か判断して、飛ばす頁を変更するコンポーネント
+import PublicRoute from "./OriginalRoot/page/component/public_Route_container"
 import PrivateRoute from "./OriginalRoot/page/component/private_Route_container"
 
 //各ページ
 import TopPage from "./OriginalRoot/page/top_page_container"
 import RouteFail from "./OriginalRoot/page/route_faire"
 import LoginPage from "./OriginalRoot/page/login_page_container"
+import ProjectList from "./OriginalRoot/page/project_list_container"
 import ProjectDetail from "./OriginalRoot/page/project_detail"
-import ProjectAdd from "./OriginalRoot/page/project_add"
+import ProjectAdd from "./OriginalRoot/page/project_add_container"
 
 // import Home from "./OriginalRoot/Container"
 // import {Home2} from "./OriginalRoot/unuse/home2"
@@ -28,9 +30,11 @@ ReactDOM.render(
       <Router>
         <Switch>
           {/* ルート画面 */}
-          <Route exact path="/" component={TopPage}></Route>
+          <PublicRoute exact path="/" component={TopPage}></PublicRoute>
           {/* ログイン画面 */}
-          <Route path="/login" component={LoginPage}></Route>
+          <PublicRoute path="/login" component={LoginPage}></PublicRoute>
+          {/* プロジェクトリスト表示 */}
+          <PrivateRoute path="/list" component={ProjectList}></PrivateRoute>
           {/* プロジェクト詳細画面 */}
           <PrivateRoute path="/detail" component={ProjectDetail}></PrivateRoute>
           {/* プロジェクト新規登録画面 */}

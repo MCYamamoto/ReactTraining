@@ -1,27 +1,25 @@
 import React, { Component } from 'react'
-import {Route} from "react-router-dom";  //SPA用
-import {PrivaterouteReduxState, PrivaterouteReduxAction} from "./private_Route_container"
+import {Route, Redirect} from "react-router-dom";  //SPA用
+import {PublicrouteReduxState, PublicrouteReduxAction} from "./public_Route_container"
 
 import firebase from "./../../db/firebase"
 
-//リンクページ
-import LoginPage from "../../page/login_page_container"
-
 // プロパティ
 interface OwnProps{
+    exact?:boolean,
     path:string,
     component:any
 }
 
-type PrivateRouteProps = OwnProps & PrivaterouteReduxState & PrivaterouteReduxAction;
+type PublicRouteProps = OwnProps & PublicrouteReduxState & PublicrouteReduxAction;
 
 // ステート
-interface PrivateRouteState{
+interface PublicRouteState{
     loading:boolean
 }
 
-export default class PrivateRoute extends Component<PrivateRouteProps,PrivateRouteState>{
-    constructor(props:PrivateRouteProps)
+export default class PublicRoute extends Component<PublicRouteProps,PublicRouteState>{
+    constructor(props:PublicRouteProps)
     {
         super(props);
         this.state = {
@@ -55,25 +53,33 @@ export default class PrivateRoute extends Component<PrivateRouteProps,PrivateRou
 
     render()
     {
-        let lcomponent;
         //認証チェック完了している場合、ルーティングする
         if(this.state.loading === false) 
         {
             if(this.props.login === false)
             {
             //未ログインの場合、
-                //ログイン頁頁表示
-                lcomponent = LoginPage;
+                //指定されたパスの頁を表示
+                if(this.props.exact == null)
+                {
+                    return(
+                        <Route path={this.props.path} component={this.props.component}></Route>
+                    );    
+                }
+                {
+                    return(
+                        <Route exact path={this.props.path} component={this.props.component}></Route>
+                    );    
+                }
             }
             else
             {
             //ログイン済みの場合
-                //指定されたパスの頁を表示
-                lcomponent=this.props.component;
+                //プロジェクト一覧ページにリダイレクト
+                return(
+                    <Redirect to="/list"/>
+                );
             }
-            return(
-                <Route path={this.props.path} component={lcomponent}></Route>
-            );
         }
         //認証チェック未完了の場合、何も表示しない。
         else

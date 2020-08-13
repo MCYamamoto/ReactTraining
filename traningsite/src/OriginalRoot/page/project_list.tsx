@@ -10,16 +10,18 @@ import ComHeaer from "./component/com_header_container";
 import ProjectListTable from "./component/project_list_table_container";
 
 //コンテナ
-import {TopPageReduxState, TopPageReduxAction} from "./top_page_container"
+import {ProjectListReduxState} from "./project_list_container"
 
 //プロパティ
 interface OwnProps {
+    history:any;
+    location:any;
 }
 
-type TopPageProps = OwnProps & TopPageReduxState & TopPageReduxAction
+type ProjectListProps = OwnProps & ProjectListReduxState
 
-export default class TopPage extends Component<TopPageProps>{
-    constructor(props:TopPageProps){
+export default class ProjectList extends Component<ProjectListProps>{
+    constructor(props:ProjectListProps){
         super(props);
     }
     
@@ -27,12 +29,13 @@ export default class TopPage extends Component<TopPageProps>{
     {
         return(
             <>
-                <Helmet title="Project List Top Page" />
+                <Helmet title="Project List" />
                 <body>
                     <header>
                         <ComHeaer/>
                     </header>
                     <main>
+                        <ProjectListTable history={this.props.history} location={this.props.location}/>
                     </main>
                 </body>
             </>

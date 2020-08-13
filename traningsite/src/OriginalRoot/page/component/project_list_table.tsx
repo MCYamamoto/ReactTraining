@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import "../../css/project_list_table.scss"
 
 //FireBase
-import firebase, {db} from "../../db/firebase"
+import {ProjectDataObj, getProjectDataObj, getDBProjectList} from "../../db/firebase"
 
 //コンテナ
-import {ProjectListTableReduxState, ProjectListTableReduxAction} from "./project_list_table_container"
+// import {ProjectListTableReduxState, ProjectListTableReduxAction} from "./project_list_table_container"
 
 interface OwnProps {
-
+    history:any;
+    location:any;
 }
 
 enum eViewType{
@@ -16,20 +17,13 @@ enum eViewType{
     VIEW_TYPE_GRID="GRID"
 }
 
-interface ProjectDataObj {
-    number:number,      // 案件番号
-    name:string,        // 案件名
-    srcCompany:string,  // 発注元会社名
-    startDate:string,     // 開始日
-    endDate:string        // 期限
-}
-
 interface OwnState {
-    ViewType:eViewType
-    data:ProjectDataObj[]
+    ViewType:eViewType;
+    lists:getProjectDataObj[];
 }
 
-type ProjectListTableProps = OwnProps & ProjectListTableReduxState & ProjectListTableReduxAction;
+// type ProjectListTableProps = OwnProps & ProjectListTableReduxState & ProjectListTableReduxAction;
+type ProjectListTableProps = OwnProps;
 
 export default class ProjectListTable extends Component<ProjectListTableProps, OwnState>{
     gridStyle = {
@@ -43,48 +37,23 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
         border:"solid",
         padding:"10px"
     }
-
     constructor(props:ProjectListTableProps) 
     {
         super(props);
 
+        //バインド
         this.DispGrid = this.DispGrid.bind(this);
         this.DispList = this.DispList.bind(this);
+        this.SelectProject = this.SelectProject.bind(this);
+        this.getDBResolvAction = this.getDBResolvAction.bind(this);
+        this.getDBErrAction = this.getDBErrAction.bind(this);
 
         this.state = {
             ViewType:eViewType.VIEW_TYPE_LIST,
-            data:[]
+            lists:[]
         }
-
-        //DBからデータ取得
-        this.getFireData();
     }
-    
-            
-    // Firebaseからのデータ取得
-    getFireData() {
-        let docRef = db.collection("projectlist").doc("list");
-        let self = this;
-        const doc = docRef.get()
-        .then(res => {
-            //正常終了時
-            let getdata = res.data();
-            if(getdata != null)
-            {
-                // console.log(getdata.data);
-                self.setState({data:getdata.data})    
-            }
-        })
-        .catch(error => {
-            //異常終了時
-            //alert(error);
-        });
-
-        // this.setState({
-        //     data: doc.data()
-        // });
-    }
-    
+        
     //グリッド表示
     DispGrid(){
         this.setState((state)=>({ViewType:eViewType.VIEW_TYPE_GRID}))
@@ -95,8 +64,35 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
     {
         this.setState((state)=>({ViewType:eViewType.VIEW_TYPE_LIST}))
     }
-
+    //プロジェクト選択
+    SelectProject(event: React.MouseEvent<HTMLTableRowElement, MouseEvent>)
+    {
+        if(event.currentTarget)  
+        {
+            let currentIndex = event.currentTarget.sectionRowIndex;
+            console.log(currentIndex);
+            if(currentIndex >= 0 && currentIndex < this.state.lists.length)
+            {
+                console.log(this.state.lists[currentIndex]);
+                this.props.history.push("/detail?id="+this.state.lists[currentIndex].docID);
+            }
+        }
+    }
+    //DB取得成功時のアクション
+    getDBResolvAction(getdata:getProjectDataObj[])
+    {
+        this.setState({lists:getdata})    
+    }
+    //DB取得失敗時のアクション
+    getDBErrAction(err:any)
+    {
+        //未ログインのため、何もしない。
+        //alert(err);
+    }
     render(){
+        //DBからデータ取得
+        getDBProjectList("number", "desc", 10, "", "", this.getDBResolvAction, this.getDBErrAction);
+
         let ViewTypeBtnStyle = 
         {
             display:"flex"
@@ -113,13 +109,13 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
                 </tr>
             </thead>
             <tbody>
-                {this.state.data.map((value)=>
-                    <tr>
-                        <td>{value.number}</td>
-                        <td>{value.name}</td>
-                        <td>{value.srcCompany}</td>
-                        <td>{value.startDate}</td>
-                        <td>{value.endDate}</td>
+                {this.state.lists.map((value)=>
+                    <tr onClick={this.SelectProject} key={value.data.number}>
+                        <td>{value.data.number}</td>
+                        <td>{value.data.name}</td>
+                        <td>{value.data.srcCompany}</td>
+                        <td>{value.data.startDate}</td>
+                        <td>{value.data.endDate}</td>
                     </tr>
                 )}
             </tbody>
@@ -127,13 +123,13 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
         )
         let ViewLGrid = (
                 <div style={this.gridStyle}>
-                    {this.state.data.map((value)=>
+                    {this.state.lists.map((value)=>
                         <div style={this.gridItemStyle}>
-                            <p>{"案件番号　　:"}{value.number}</p>
-                            <p>{"案件名　　　:"}{value.name}</p>
-                            <p>{"発注元会社名:"}{value.srcCompany}</p>
-                            <p>{"開始日　　　:"}{value.startDate}</p>
-                            <p>{"期限　　　　:"}{value.endDate}</p>
+                            <p>{"案件番号　　:"}{value.data.number}</p>
+                            <p>{"案件名　　　:"}{value.data.name}</p>
+                            <p>{"発注元会社名:"}{value.data.srcCompany}</p>
+                            <p>{"開始日　　　:"}{value.data.startDate}</p>
+                            <p>{"期限　　　　:"}{value.data.endDate}</p>
                         </div> 
                     )}
                 </div>

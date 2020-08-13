@@ -1,5 +1,5 @@
 //必要
-import React, { Component, ReactElement } from 'react'
+import React, { Component } from 'react'
 import {Helmet} from "react-helmet"
 import {Label, Button, Input} from "semantic-ui-react"
 import firebase from '../db/firebase';
@@ -8,7 +8,6 @@ import firebase from '../db/firebase';
 
 // コンポーネント
 import ComHeaer from "./component/com_header_container";
-
 
 //コンテナ
 import {LoginPageReduxState, LoginPageReduxAction} from "./login_page_container"
@@ -46,11 +45,13 @@ export default class LoginPage extends Component<LoginPageProps, LoginPageState>
     }
     //メールアドレス更新
     handleMailChange(e:React.ChangeEvent<HTMLInputElement>){
-        this.setState({mail:e.target.value});
+        let value = e.target.value
+        this.setState({mail:value});
     }
     //パスワード更新
     handlePasswordChange(e:React.ChangeEvent<HTMLInputElement>){
-        this.setState({pass:e.target.value});
+        let value = e.target.value
+        this.setState({pass:value});
     }
     
     //ログイン開始
