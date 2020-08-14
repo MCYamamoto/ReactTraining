@@ -1,5 +1,5 @@
 //必要
-import React, { Component } from 'react'
+import React, { Component, ReactEventHandler } from 'react'
 import {Helmet} from "react-helmet"
 import {Label, Button, Input} from "semantic-ui-react"
 import firebase from '../db/firebase';
@@ -40,6 +40,7 @@ export default class LoginPage extends Component<LoginPageProps, LoginPageState>
 
         //バインド
         this.LoginClick = this.LoginClick.bind(this);
+        this.LoginEnter = this.LoginEnter.bind(this);
         this.handleMailChange = this.handleMailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
     }
@@ -53,9 +54,7 @@ export default class LoginPage extends Component<LoginPageProps, LoginPageState>
         let value = e.target.value
         this.setState({pass:value});
     }
-    
-    //ログイン開始
-    LoginClick(){
+    sigIn(){
         //ローディング中にする。
         this.setState({loading:true});
         //サインイン（ログイン）処理
@@ -77,12 +76,22 @@ export default class LoginPage extends Component<LoginPageProps, LoginPageState>
                 //ローディング中にする。
                 this.setState({loading:false});
                 //異常終了時
-                console.log(this.props.location);
                 this.props.loginaction(false);
                 alert(error);
             });
     }
-    
+    //ログイン開始
+    LoginClick(){
+        this.sigIn();
+    }
+    //ログイン開始(エンターキー)
+    LoginEnter(e: React.KeyboardEvent<HTMLInputElement>)
+    {
+        if(e.key === "Enter")
+        {
+            this.sigIn();
+        }
+    }
     render()
     {
         let dispMain;
@@ -98,7 +107,7 @@ export default class LoginPage extends Component<LoginPageProps, LoginPageState>
                     <br />
                     <div className="input">
                         <Label className="label" for="lpass">Paassword:</Label>
-                        <Input type="text" name="pass" id="lpass" placeholder="Password" onChange={this.handlePasswordChange}/>
+                        <Input type="password" name="pass" id="lpass" placeholder="Password" onChange={this.handlePasswordChange}  onKeyPress={this.LoginEnter} />
                     </div>
                     <br />
                     <Button onClick={this.LoginClick}>認証</Button>

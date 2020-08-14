@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import {Select,DropdownItemProps,DropdownProps} from "semantic-ui-react"
+
+//CSS
 import "../../css/project_list_table.scss"
 
 //画像
@@ -21,25 +24,29 @@ enum eViewType{
 }
 
 interface OwnState {
-    loading:boolean;
-    ViewType:eViewType;
-    lists:getProjectDataObj[];
+    loading:boolean;            //ロード中状態
+    ViewType:eViewType;         //リスト表示の種別
+    docMaxPage:number;          //全頁数
+    dispPage:number;            //現在表示中の頁数(1オリジン)
+    dispNum:number;             //１ページの表示数
+    lists:getProjectDataObj[];  //表示データ
 }
 
 // type ProjectListTableProps = OwnProps & ProjectListTableReduxState & ProjectListTableReduxAction;
 type ProjectListTableProps = OwnProps;
 
 export default class ProjectListTable extends Component<ProjectListTableProps, OwnState>{
+    //スタイル
     gridStyle = {
         display:"grid",
-        gap:"26px",
+        gap:"18px",
         gridTemplateColumns:"repeat(auto-fit, minmax(240px, 1fr))",
-        marginTop:"6%",
+        marginTop:"1%",
         marginBottom:"50px",
     }
     gridItemStyle = {
         border:"solid 1px",
-        padding:"10px"
+        padding:"10px",
     }
     constructor(props:ProjectListTableProps) 
     {
@@ -49,6 +56,9 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
         //ボタンクリック
         this.DispGrid = this.DispGrid.bind(this);
         this.DispList = this.DispList.bind(this);
+        this.clickPrevPage = this.clickPrevPage.bind(this);
+        this.clickNextPage = this.clickNextPage.bind(this);
+        this.selectPage = this.selectPage.bind(this);
 
         //テーブル選択
         this.SelectProjectList = this.SelectProjectList.bind(this);
@@ -61,11 +71,14 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
         this.state = {
             loading:true,
             ViewType:eViewType.VIEW_TYPE_LIST,
+            docMaxPage:1,
+            dispPage:1,
+            dispNum:15,
             lists:[]
         }
 
         //DBからデータ取得
-        getDBProjectList("number", "desc", 10, "", "", this.getDBResolvAction, this.getDBErrAction);
+        getDBProjectList("number", "desc", ((this.state.dispPage-1)*this.state.dispNum), this.state.dispNum, "", "", this.getDBResolvAction, this.getDBErrAction);
     }
         
     //グリッド表示
@@ -102,9 +115,60 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
             }
         }
     }
-    //DB取得成功時のアクション
-    getDBResolvAction(getdata:getProjectDataObj[])
+    selectPage(e: React.SyntheticEvent<HTMLElement, Event> ,data: DropdownProps)
     {
+        let selectPage = data.value;
+        this.setState((value)=>{
+            return {
+                loading:true,
+                dispPage:Number(selectPage)
+            }
+        },()=>{
+            //DBからデータ取得
+            getDBProjectList("number", "desc", (this.state.dispPage-1)*this.state.dispNum, this.state.dispNum, "", "", this.getDBResolvAction, this.getDBErrAction);
+        })
+}
+    clickPrevPage(){
+        //前の頁へ
+        //念のため、下限チェック
+        if(this.state.dispPage > 1)
+        {
+            this.setState((value)=>{return {
+                loading:true,
+                dispPage:value.dispPage-1}
+            },()=>{
+                //DBからデータ取得
+                getDBProjectList("number", "desc", (this.state.dispPage-1)*this.state.dispNum, this.state.dispNum, "", "", this.getDBResolvAction, this.getDBErrAction);
+            })
+        }
+    }
+    clickNextPage(){
+        //次の頁へ
+        //念のため、上限チェック
+        if(this.state.dispPage < this.state.docMaxPage)
+        {
+            this.setState((value)=>{
+                return {
+                    loading:true,
+                    dispPage:value.dispPage+1
+                }
+            },()=>{
+                //DBからデータ取得
+                getDBProjectList("number", "desc", (this.state.dispPage-1)*this.state.dispNum, this.state.dispNum, "", "", this.getDBResolvAction, this.getDBErrAction);
+            })
+        }
+    }
+    //DB取得成功時のアクション
+    getDBResolvAction(docsize:number,getdata:getProjectDataObj[])
+    {
+        //ドキュメント数更新
+        this.setState((state)=>{
+            return{
+                docMaxPage:Math.ceil((docsize/state.dispNum))
+            }
+        });
+
+        //ドキュメントリスト更新
         if(getdata != null)
         {
             this.setState({lists:getdata})
@@ -124,7 +188,7 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
             {
                 display:"flex",
                 justifyContent: "flex-end",
-                marginRight:"50px"
+                // margin:"50px"
             }
             let ViewList = (
             <table>
@@ -163,12 +227,27 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
                         )}
                     </div>
             )
+            let options:DropdownItemProps[] = [];
+            for(let i= 1;i<=this.state.docMaxPage;i++)
+            {
+               options.push({
+                   key:i,
+                   value:i,
+                   text:i
+               });
+            } 
             return(
                 <div>
                     <div style={ViewTypeBtnStyle}>
                         <input className="project-list--main--input" type="image" name="DispList" src={logoListView} alt="ListView" onClick={this.DispList} />
                         <input className="project-list--main--input" type="image" name="DispGrid" src={logoGridView} alt="GridView" onClick={this.DispGrid} />
                     </div> 
+                    <div className="project-list--main--pagedisp--select">
+                        {this.state.dispPage<=1?<div></div>:<label className="project-list--main--pageselect--label" onClick={this.clickPrevPage}>&lt;</label>}
+                        <Select value={this.state.dispPage} options={options} onChange={this.selectPage}/>
+                        <label className="project-list--main--pagedisp--label"> / {this.state.docMaxPage}</label>
+                        {this.state.dispPage===(this.state.docMaxPage)?<div></div>:<label className="project-list--main--pageselect--label" onClick={this.clickNextPage}>&gt;</label>}
+                    </div>
                     {this.state.ViewType===eViewType.VIEW_TYPE_LIST?ViewList:ViewLGrid}
                 </div>
             );    

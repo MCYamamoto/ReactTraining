@@ -30,7 +30,7 @@ table{
   table th,table td{
     text-align: left;
     // width: 20%;
-    padding: 15px 0;
+    padding: 8px 0;
   }
   
 
@@ -70,4 +70,20 @@ table{
   :hover{
     background-color: #d4f0fd;   
   }
+}
+
+.project-list--main--pageselect--label
+{
+  margin: 15px;
+  cursor: pointer;
+}
+
+.project-list--main--pagedisp--label
+{
+  margin: 20px;
+}
+
+.project-list--main--pagedisp--select
+{
+  text-align: right;
 }

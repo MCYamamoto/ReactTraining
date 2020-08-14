@@ -39,35 +39,58 @@ export const dbInfo = {
 export const dbColRef = db.collection(dbInfo.ProjectListCollection);
 
 // Firebaseからのデータ取得
-export function getDBProjectList(OrderKey:string, Orderby:"desc" | "asc" | undefined, limit:number, whereParam:string, whereValue:string,resolvAction:(getdata:getProjectDataObj[])=>void, errAction:(erro:any)=>void):void
+export function getDBProjectList(OrderKey:string, Orderby:"desc" | "asc" | undefined, Offset:number, limit:number, whereParam:string, whereValue:string,resolvAction:(docsize:number,getdata:getProjectDataObj[])=>void, errAction:(erro:any)=>void):void
 {
     let colRef;
     //条件有の場合
     if(whereParam != "" && whereValue != "")
     {
-        colRef = dbColRef.where(whereParam, "==", whereValue).orderBy(OrderKey, Orderby).limit(limit);
+        colRef = dbColRef.where(whereParam, "==", whereValue).orderBy(OrderKey, Orderby);
     }
     //条件無の場合
     else
     {
-        colRef = dbColRef.orderBy(OrderKey, Orderby).limit(limit);
+        colRef = dbColRef.orderBy(OrderKey, Orderby);
     }
-    const doc = colRef.get()
-    .then(res => {
-        //正常終了時
-        const getdata = res.docs.map(doc=>{
-                    return{
-                        docID:doc.id,
-                        data:doc.data()
-                    }
-                }
-            )
-        resolvAction(getdata as getProjectDataObj[]);
-    })
-    .catch(error => {
-        //異常終了時
-        errAction(error);
-    });
+
+    colRef.get()
+        .then((res)=>{
+            let docsize = res.docs.length;
+            if(Offset > docsize)
+            {
+                errAction("データ不正です。リロードしてください。");
+                return;
+            }
+            //条件有の場合
+            if(whereParam != "" && whereValue != "")
+            {
+                colRef = dbColRef.where(whereParam, "==", whereValue).orderBy(OrderKey, Orderby).startAt(res.docs[Offset]).limit(limit);
+            }
+            //条件無の場合
+            else
+            {
+                colRef = dbColRef.orderBy(OrderKey, Orderby).startAt(res.docs[Offset]).limit(limit);
+            }
+            const doc = colRef.get()
+            .then(res => {
+                //正常終了時
+                const getdata = res.docs.map(doc=>{
+                            return{
+                                docID:doc.id,
+                                data:doc.data()
+                            }
+                        }
+                    )
+                resolvAction(docsize, getdata as getProjectDataObj[]);
+            })
+            .catch(error => {
+                //異常終了時
+                errAction(error);
+            });                
+        })
+        .catch((err)=>{
+            errAction(err)
+        })
 }
 
 // Firebaseからのデータ取得
