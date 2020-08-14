@@ -17,11 +17,13 @@ const app = firebase.initializeApp(firebaseConfig);
 export const db = firebase.firestore();
 
 export interface ProjectDataObj {
-    number:number,      // 案件番号
-    name:string,        // 案件名
-    srcCompany:string,  // 発注元会社名
-    startDate:string,     // 開始日
-    endDate:string        // 期限
+    number:number,          // 案件番号
+    name:string,            // 案件名
+    srcCompany:string,      // 発注元会社名
+    startDate:string,       // 開始日
+    endDate:string,         // 期限
+    logCreateDate:string,   // 作成日時
+    logUpdateDate:string,   // 更新日時
 }
 
 export interface getProjectDataObj {
@@ -40,10 +42,12 @@ export const dbColRef = db.collection(dbInfo.ProjectListCollection);
 export function getDBProjectList(OrderKey:string, Orderby:"desc" | "asc" | undefined, limit:number, whereParam:string, whereValue:string,resolvAction:(getdata:getProjectDataObj[])=>void, errAction:(erro:any)=>void):void
 {
     let colRef;
+    //条件有の場合
     if(whereParam != "" && whereValue != "")
     {
-        colRef = dbColRef.where(whereParam, "==", whereValue);
+        colRef = dbColRef.where(whereParam, "==", whereValue).orderBy(OrderKey, Orderby).limit(limit);
     }
+    //条件無の場合
     else
     {
         colRef = dbColRef.orderBy(OrderKey, Orderby).limit(limit);
@@ -58,10 +62,7 @@ export function getDBProjectList(OrderKey:string, Orderby:"desc" | "asc" | undef
                     }
                 }
             )
-        if(getdata != null && getdata.length > 0)
-        {
-            resolvAction(getdata as getProjectDataObj[]);
-        }
+        resolvAction(getdata as getProjectDataObj[]);
     })
     .catch(error => {
         //異常終了時
@@ -108,7 +109,9 @@ export function AddDBProjectList(add_data:ProjectDataObj,resolvAction:(res:any)=
                 name: add_data.name,
                 srcCompany:add_data.srcCompany,
                 startDate: add_data.startDate,
-                endDate:add_data.endDate
+                endDate:add_data.endDate,
+                logCreateDate:new Date(),   // 作成日時
+                logUpdateDate:new Date(),   // 更新日時                            
             }).then((res)=>{
                 resolvAction(res);
             }).catch((err)=>{
@@ -138,8 +141,10 @@ export function updateDBProjectList(docID:string, add_data:ProjectDataObj,resolv
                     name: add_data.name,
                     srcCompany:add_data.srcCompany,
                     startDate: add_data.startDate,
-                    endDate:add_data.endDate
-                }).then((res)=>{
+                    endDate:add_data.endDate,
+                    logCreateDate:add_data.logCreateDate,
+                    logUpdateDate:new Date(),   // 更新日時                            
+                    }).then((res)=>{
                     resolvAction(res);
                 }).catch((err)=>{
                     errAction(err);
@@ -157,7 +162,9 @@ export function updateDBProjectList(docID:string, add_data:ProjectDataObj,resolv
                 name: add_data.name,
                 srcCompany:add_data.srcCompany,
                 startDate: add_data.startDate,
-                endDate:add_data.endDate
+                endDate:add_data.endDate,
+                logCreateDate:add_data.logCreateDate,
+                logUpdateDate:new Date(),   // 更新日時                            
             }).then((res)=>{
                 resolvAction(res);
             }).catch((err)=>{

@@ -4,6 +4,9 @@ import {Label, Input, Button} from "semantic-ui-react"
 //共通ヘッダ
 import ComHeaer from "./component/com_header_container";
 
+//CSS
+import "./../css/project_add.scss"
+
 //FireBase
 import {ProjectDataObj, AddDBProjectList} from "../db/firebase"
 
@@ -33,7 +36,9 @@ export default class ProjectAdd extends Component<ProjectAddProps, ProjectAddSta
                 name:"",            // 案件名
                 srcCompany:"",      // 発注元会社名
                 startDate:"",       // 開始日
-                endDate:""          // 期限            
+                endDate:"",         // 期限
+                logCreateDate:"",   // 作成日時
+                logUpdateDate:"",   // 更新日時                        
             }
         }
 
@@ -58,13 +63,16 @@ export default class ProjectAdd extends Component<ProjectAddProps, ProjectAddSta
     }
     //案件番号入力
     handleNumberChange(e:React.ChangeEvent<HTMLInputElement>){
-        let value = e.target.value
-        this.setState((state)=>{
-                let newObj = state.add_data;
-                newObj.number = Number(value);
-                return {add_data:newObj};
-            }
-        );
+        let value = e.target.value;
+        if(!Number.isNaN(Number(value)))
+        {
+            this.setState((state)=>{
+                    let newObj = state.add_data;
+                    newObj.number = Number(value);
+                    return {add_data:newObj};
+                }
+            );
+        }
     }
     //案件名入力
     handleNameChange(e:React.ChangeEvent<HTMLInputElement>){
@@ -138,26 +146,46 @@ export default class ProjectAdd extends Component<ProjectAddProps, ProjectAddSta
         if(this.state.loading === false)
         {
             dispMain = (
-                <div>
-                    <h1>New Project Infomation</h1>
-                    <Label for="lnumber">案件番号:</Label>
-                    <Input type="text" name="number" id="lnumber" placeholder="案件番号" onChange={this.handleNumberChange} value={this.state.add_data.number}/><br />
-                    <Label for="lname">案件名:</Label>
-                    <Input type="text" name="name" id="lname" placeholder="案件名" onChange={this.handleNameChange} value={this.state.add_data.name}/><br />
-                    <Label for="lsrcCompany">発注元会社名:</Label>
-                    <Input type="text" name="srcCompany" id="lsrcCompany" placeholder="発注元会社名" onChange={this.handlesrcCompanyChange} value={this.state.add_data.srcCompany}/><br />
-                    <Label for="lstartDate">開始日:</Label>
-                    <Input type="text" name="startDate" id="lstartDate" placeholder="開始日" onChange={this.handlestartDateChange} value={this.state.add_data.startDate}/><br />
-                    <Label for="lendDate">期限:</Label>
-                    <Input type="text" name="endDate" id="lendDate" placeholder="期限" onChange={this.handleendDateChange} value={this.state.add_data.endDate}/><br />
-                    <Button onClick={this.OKClick}>OK</Button>
+                <div className="projectadd--page--main">
+                    <h2>New Project Infomation</h2>
+                    <div className="input_rows">
+                        <div className="input_row">
+                            <div className="input">
+                                <Label className="label" for="lnumber">案件番号:</Label>
+                                <Input type="text" name="number" id="lnumber" placeholder="案件番号" onChange={this.handleNumberChange} value={this.state.add_data.number}/>
+                            </div>
+                            <br />
+                            <div className="input">
+                                <Label className="label" for="lname">案件名:</Label>
+                                <Input type="text" name="name" id="lname" placeholder="案件名" onChange={this.handleNameChange} value={this.state.add_data.name}/>
+                            </div>
+                            <br />
+                            <div className="input">
+                                <Label className="label" for="lsrcCompany">発注元会社名:</Label>
+                                <Input type="text" name="srcCompany" id="lsrcCompany" placeholder="発注元会社名" onChange={this.handlesrcCompanyChange} value={this.state.add_data.srcCompany}/>
+                            </div>
+                        </div>
+                        <div className="input_row">
+                            <div className="input">
+                                <Label className="label" for="lstartDate">開始日:</Label>
+                                <Input type="date" name="startDate" id="lstartDate" placeholder="開始日" onChange={this.handlestartDateChange} value={this.state.add_data.startDate}/>
+                            </div>
+                            <br />
+                            <div className="input">
+                                <Label className="label" for="lendDate">期限:</Label>
+                                <Input type="date" name="endDate" id="lendDate" placeholder="期限" onChange={this.handleendDateChange} value={this.state.add_data.endDate}/>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <Button className="okbutton" onClick={this.OKClick}>OK</Button>
                 </div>
             );
         }
         else
         {
             dispMain = (
-                <div>
+                <div className="projectadd--page--loading">
                     <h2>登録中...</h2>
                 </div>
             );
@@ -168,7 +196,7 @@ export default class ProjectAdd extends Component<ProjectAddProps, ProjectAddSta
                 <Helmet title="Project Add" />
                 <body>
                     <header>
-                        <ComHeaer/>
+                        <ComHeaer newprojectEnable={false}/>
                     </header>
                     <main>
                         {dispMain}

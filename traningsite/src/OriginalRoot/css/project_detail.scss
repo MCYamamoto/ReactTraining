@@ -1,0 +1,46 @@
+@import url(base.scss);
+@import url(com_header.scss);
+
+.projectdetail--page--loading
+{
+    h2{
+        text-align: center;
+        margin-top:1%;
+    }
+}
+
+.projectdetail--page--main
+{
+    h2{
+        margin-top:1%;
+        margin-left:10px;
+    }
+
+    .input{
+        display: inline-block;
+        text-align: left;
+        margin: 2px 15px;
+    }
+
+    .label{
+        width:110px; 
+        text-align:right;
+    }
+
+    .updatebutton{
+        margin-left:20px;
+    }
+
+    .deletebutton{
+        margin-left:20px;
+    }
+
+    .input_rows
+    {
+        display:flex;
+    }
+    .input_row
+    {
+        width:370px;
+    }
+}

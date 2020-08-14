@@ -105,7 +105,10 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
     //DB取得成功時のアクション
     getDBResolvAction(getdata:getProjectDataObj[])
     {
-        this.setState({lists:getdata})    
+        if(getdata != null)
+        {
+            this.setState({lists:getdata})
+        }
         this.setState({loading:false});
     }
     //DB取得失敗時のアクション

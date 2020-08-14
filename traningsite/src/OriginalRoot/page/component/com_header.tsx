@@ -11,6 +11,7 @@ import {ComHeaderReduxState, ComHeaderReduxAction} from "./com_header_container"
 interface OwnProps
 {
     naviEnable?:boolean;
+    newprojectEnable?:boolean;
     history?:any;
     location?:any;
 }
@@ -18,6 +19,7 @@ interface OwnProps
 interface DefaultProps
 {
     naviEnable:boolean;
+    newprojectEnable:boolean;
 }
 
 type ComHeaerProps = OwnProps & ComHeaderReduxState & ComHeaderReduxAction;
@@ -26,7 +28,8 @@ export default class ComHeaer extends Component<ComHeaerProps>
 {
     // Propsのデフォルト値
     public static defaultProps: DefaultProps = {
-        naviEnable: true  // デフォルトはnav有効
+        naviEnable: true,      // デフォルトはnav有効
+        newprojectEnable: true //デフォルトはNew Project表示有効
     };
 
     //別のスタイル設定方法(今回は使用してない)
@@ -70,7 +73,7 @@ export default class ComHeaer extends Component<ComHeaerProps>
                 DispNavi = 
                 <nav className="header-nav">
                     <ul>
-                        <li><Link className="header-link" to="/add">NewProject</Link></li>
+                        {this.props.newprojectEnable?<li><Link className="header-link" to="/add">NewProject</Link></li>:<div></div>}
                         <li><Link className="header-link" to="/" onClick={this.SignOutClick}>SignOut</Link></li>
                     </ul>
                 </nav>

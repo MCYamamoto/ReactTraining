@@ -4,6 +4,9 @@ import {Helmet} from "react-helmet"
 import {parse} from 'query-string';
 import ComHeaer from "./component/com_header_container";
 
+//CSS
+import "./../css/project_detail.scss"
+
 //FireBase
 import {ProjectDataObj, getDBProjectData, updateDBProjectList, deleteDBProjectList} from "../db/firebase"
 
@@ -41,7 +44,9 @@ export default class ProjectDetail extends Component<ProjectDetailProps, Project
                 name:"",            // 案件名
                 srcCompany:"",      // 発注元会社名
                 startDate:"",       // 開始日
-                endDate:""          // 期限            
+                endDate:"",         // 期限            
+                logCreateDate:"",   // 作成日時
+                logUpdateDate:"",   // 更新日時                        
             }
         }
 
@@ -79,12 +84,15 @@ export default class ProjectDetail extends Component<ProjectDetailProps, Project
     //案件番号入力
     handleNumberChange(e:React.ChangeEvent<HTMLInputElement>){
         let value = e.target.value
-        this.setState((state)=>{
-                let newObj = state.add_data;
-                newObj.number = Number(value);
-                return {add_data:newObj};
-            }
-        );
+        if(!Number.isNaN(Number(value)))
+        {
+            this.setState((state)=>{
+                    let newObj = state.add_data;
+                    newObj.number = Number(value);
+                    return {add_data:newObj};
+                }
+            );
+        }
     }
     //案件名入力
     handleNameChange(e:React.ChangeEvent<HTMLInputElement>){
@@ -193,21 +201,37 @@ export default class ProjectDetail extends Component<ProjectDetailProps, Project
         if(this.state.loading === LOADING_STATE.LOADING_COMP)
         {
             dispMain = (
-                <div>
-                    <h1>Select Project Infomation</h1>
-                    <Label for="lnumber">案件番号:</Label>
-                    <Input type="text" name="number" id="lnumber" placeholder="案件番号" onChange={this.handleNumberChange} value={this.state.add_data.number}/><br />
-                    <Label for="lname">案件名:</Label>
-                    <Input type="text" name="name" id="lname" placeholder="案件名" onChange={this.handleNameChange} value={this.state.add_data.name}/><br />
-                    <Label for="lsrcCompany">発注元会社名:</Label>
-                    <Input type="text" name="srcCompany" id="lsrcCompany" placeholder="発注元会社名" onChange={this.handlesrcCompanyChange} value={this.state.add_data.srcCompany}/><br />
-                    <Label for="lstartDate">開始日:</Label>
-                    <Input type="text" name="startDate" id="lstartDate" placeholder="開始日" onChange={this.handlestartDateChange} value={this.state.add_data.startDate}/><br />
-                    <Label for="lendDate">期限:</Label>
-                    <Input type="text" name="endDate" id="lendDate" placeholder="期限" onChange={this.handleendDateChange} value={this.state.add_data.endDate}/><br />
+                <div className="projectdetail--page--main">
+                    <h2>Select Project Infomation</h2>
+                    <div className="input_rows">
+                        <div className="input_row">
+                            <div className="input">
+                                <Label for="lnumber">案件番号:</Label>
+                                <Input type="text" name="number" id="lnumber" placeholder="案件番号" onChange={this.handleNumberChange} value={this.state.add_data.number}/>
+                            </div><br />
+                            <div className="input">
+                                <Label for="lname">案件名:</Label>
+                                <Input type="text" name="name" id="lname" placeholder="案件名" onChange={this.handleNameChange} value={this.state.add_data.name}/>
+                            </div><br />
+                            <div className="input">
+                                <Label for="lsrcCompany">発注元会社名:</Label>
+                                <Input type="text" name="srcCompany" id="lsrcCompany" placeholder="発注元会社名" onChange={this.handlesrcCompanyChange} value={this.state.add_data.srcCompany}/>
+                            </div>
+                        </div>
+                        <div className="input_row">
+                            <div className="input">
+                                <Label for="lstartDate">開始日:</Label>
+                                <Input type="date" name="startDate" id="lstartDate" placeholder="開始日" onChange={this.handlestartDateChange} value={this.state.add_data.startDate}/>
+                            </div><br />
+                            <div className="input">
+                                <Label for="lendDate">期限:</Label>
+                                <Input type="date" name="endDate" id="lendDate" placeholder="期限" onChange={this.handleendDateChange} value={this.state.add_data.endDate}/>
+                            </div>
+                        </div>
+                    </div>
                     <hr />
-                    <Button onClick={this.UpdateClick}>Update</Button><br /><br />
-                    <Button onClick={this.DeleteClick}>Delete</Button>
+                    <Button className="updatebutton" onClick={this.UpdateClick}>Update</Button><br /><br />
+                    <Button className="deletebutton" onClick={this.DeleteClick}>Delete</Button>
                 </div>
             );
         }
@@ -215,7 +239,7 @@ export default class ProjectDetail extends Component<ProjectDetailProps, Project
         {
         //更新中
             dispMain = (
-                <div>
+                <div className="projectdetail--page--loading">
                     <h2>更新中...</h2>
                 </div>
             );
@@ -224,8 +248,8 @@ export default class ProjectDetail extends Component<ProjectDetailProps, Project
         {
         //初期表示待ち中
             dispMain = (
-                <div>
-                    <h2>取得中...</h2>
+                <div className="projectdetail--page--loading">
+                    <h2>Loading...</h2>
                 </div>
             );
         }
