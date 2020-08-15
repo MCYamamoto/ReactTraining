@@ -80,10 +80,16 @@ table{
 
 .project-list--main--pagedisp--label
 {
-  margin: 30px;
+  margin: 10px;
 }
 
 .project-list--main--pagedisp--select
+{
+  text-align: right;
+  margin-top:7px;
+}
+
+.project-list--main--pagesort--select
 {
   text-align: right;
   margin-top:7px;

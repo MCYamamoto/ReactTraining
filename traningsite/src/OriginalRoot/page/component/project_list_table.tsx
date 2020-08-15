@@ -23,12 +23,15 @@ enum eViewType{
     VIEW_TYPE_GRID="GRID"
 }
 
+type firebaseSortType = ("desc" | "asc" | undefined);
 interface OwnState {
     loading:boolean;            //ロード中状態
     ViewType:eViewType;         //リスト表示の種別
     docMaxPage:number;          //全頁数
     dispPage:number;            //現在表示中の頁数(1オリジン)
     dispNum:number;             //１ページの表示数
+    sortTitle:string;           // ソート対象
+    sortType:firebaseSortType;  // ソート種別
     lists:getProjectDataObj[];  //表示データ
 }
 
@@ -37,6 +40,18 @@ type ProjectListTableProps = OwnProps;
 
 export default class ProjectListTable extends Component<ProjectListTableProps, OwnState>{
     //スタイル
+    selectPageStyle = {
+        minWidth:"100px",
+        textAlign:"right"
+    }
+    selectSortTitleStyle = {
+        minWidth:"200px",
+        textAlign:"left"
+    }
+    selectSortTypeStyle = {
+        minWidth:"100px",
+        textAlign:"left"
+    }
     gridStyle = {
         display:"grid",
         gap:"18px",
@@ -48,6 +63,20 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
         border:"solid 1px",
         padding:"10px",
     }
+
+    //ソート条件
+    optionsSortTitle:DropdownItemProps[] = [
+        {key:0, value:"number",text:"案件番号"},
+        {key:1, value:"name",text:"案件名"},
+        {key:2, value:"srcCompany",text:"発注元会社名"},
+        {key:3, value:"startDate",text:"開始日"},
+        {key:4, value:"endDate",text:"期限"},
+    ];
+    optionsSortType:DropdownItemProps[] = [
+        {key:0, value:"desc",text:"降順"},
+        {key:1, value:"asc",text:"昇順"}
+    ];
+
     constructor(props:ProjectListTableProps) 
     {
         super(props);
@@ -59,6 +88,8 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
         this.clickPrevPage = this.clickPrevPage.bind(this);
         this.clickNextPage = this.clickNextPage.bind(this);
         this.selectPage = this.selectPage.bind(this);
+        this.selectSortTitle = this.selectSortTitle.bind(this);
+        this.selectSortType = this.selectSortType.bind(this);
 
         //テーブル選択
         this.SelectProjectList = this.SelectProjectList.bind(this);
@@ -74,6 +105,8 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
             docMaxPage:1,
             dispPage:1,
             dispNum:15,
+            sortTitle:this.optionsSortTitle[0].value as string,           // ソート対象：案件番号
+            sortType:this.optionsSortType[0].value as firebaseSortType,   // ソート種別：降順
             lists:[]
         }
 
@@ -127,7 +160,30 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
             //DBからデータ取得
             getDBProjectList("number", "desc", (this.state.dispPage-1)*this.state.dispNum, this.state.dispNum, "", "", this.getDBResolvAction, this.getDBErrAction);
         })
-}
+    }
+    selectSortTitle(e: React.SyntheticEvent<HTMLElement, Event> ,data: DropdownProps)
+    {
+        let selectSortTitle = data.value;
+        this.setState({
+            loading:true,
+            sortTitle:selectSortTitle as string,
+        },()=>{
+            //DBからデータ取得
+            getDBProjectList(this.state.sortTitle, this.state.sortType, (this.state.dispPage-1)*this.state.dispNum, this.state.dispNum, "", "", this.getDBResolvAction, this.getDBErrAction);
+        })
+    }
+    selectSortType(e: React.SyntheticEvent<HTMLElement, Event> ,data: DropdownProps)
+    {
+        let selectSortType = data.value;
+        this.setState({
+            loading:true,
+            sortType:selectSortType as firebaseSortType,
+        },()=>{
+            //DBからデータ取得
+            getDBProjectList(this.state.sortTitle, this.state.sortType, (this.state.dispPage-1)*this.state.dispNum, this.state.dispNum, "", "", this.getDBResolvAction, this.getDBErrAction);
+        })
+    }
+
     clickPrevPage(){
         //前の頁へ
         //念のため、下限チェック
@@ -227,10 +283,10 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
                         )}
                     </div>
             )
-            let options:DropdownItemProps[] = [];
+            let optionsDispPage:DropdownItemProps[] = [];
             for(let i= 1;i<=this.state.docMaxPage;i++)
             {
-               options.push({
+                optionsDispPage.push({
                    key:i,
                    value:i,
                    text:i
@@ -241,9 +297,13 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
                     <div style={ViewTypeBtnStyle}>
                         <div className="project-list--main--pagedisp--select">
                             {this.state.dispPage<=1?<div></div>:<label className="project-list--main--pageselect--label" onClick={this.clickPrevPage}>&lt;</label>}
-                            <Select value={this.state.dispPage} options={options} onChange={this.selectPage}/>
+                            <Select style={this.selectPageStyle} value={this.state.dispPage} options={optionsDispPage} onChange={this.selectPage}/>
                             <label className="project-list--main--pagedisp--label"> / {this.state.docMaxPage}</label>
                             {this.state.dispPage===(this.state.docMaxPage)?<div></div>:<label className="project-list--main--pageselect--label" onClick={this.clickNextPage}>&gt;</label>}
+                        </div>
+                        <div className="project-list--main--pagesort--select">
+                            <Select style={this.selectSortTitleStyle} value={this.state.sortTitle} options={this.optionsSortTitle} onChange={this.selectSortTitle}/>
+                            <Select style={this.selectSortTypeStyle} value={this.state.sortType} options={this.optionsSortType} onChange={this.selectSortType}/>
                         </div>
                         <input className="project-list--main--input" type="image" name="DispList" src={logoListView} alt="ListView" onClick={this.DispList} />
                         <input className="project-list--main--input" type="image" name="DispGrid" src={logoGridView} alt="GridView" onClick={this.DispGrid} />
