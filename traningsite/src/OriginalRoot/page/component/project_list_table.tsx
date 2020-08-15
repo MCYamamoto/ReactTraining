@@ -188,7 +188,7 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
             {
                 display:"flex",
                 justifyContent: "flex-end",
-                // margin:"50px"
+                marginRight:"50px"
             }
             let ViewList = (
             <table>
@@ -239,15 +239,15 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
             return(
                 <div>
                     <div style={ViewTypeBtnStyle}>
+                        <div className="project-list--main--pagedisp--select">
+                            {this.state.dispPage<=1?<div></div>:<label className="project-list--main--pageselect--label" onClick={this.clickPrevPage}>&lt;</label>}
+                            <Select value={this.state.dispPage} options={options} onChange={this.selectPage}/>
+                            <label className="project-list--main--pagedisp--label"> / {this.state.docMaxPage}</label>
+                            {this.state.dispPage===(this.state.docMaxPage)?<div></div>:<label className="project-list--main--pageselect--label" onClick={this.clickNextPage}>&gt;</label>}
+                        </div>
                         <input className="project-list--main--input" type="image" name="DispList" src={logoListView} alt="ListView" onClick={this.DispList} />
                         <input className="project-list--main--input" type="image" name="DispGrid" src={logoGridView} alt="GridView" onClick={this.DispGrid} />
                     </div> 
-                    <div className="project-list--main--pagedisp--select">
-                        {this.state.dispPage<=1?<div></div>:<label className="project-list--main--pageselect--label" onClick={this.clickPrevPage}>&lt;</label>}
-                        <Select value={this.state.dispPage} options={options} onChange={this.selectPage}/>
-                        <label className="project-list--main--pagedisp--label"> / {this.state.docMaxPage}</label>
-                        {this.state.dispPage===(this.state.docMaxPage)?<div></div>:<label className="project-list--main--pageselect--label" onClick={this.clickNextPage}>&gt;</label>}
-                    </div>
                     {this.state.ViewType===eViewType.VIEW_TYPE_LIST?ViewList:ViewLGrid}
                 </div>
             );    

@@ -7,6 +7,9 @@ import ComHeaer from "./component/com_header_container";
 //CSS
 import "./../css/project_detail.scss"
 
+//コンテナ
+import {DetailPageReduxState} from "./project_detail_container"
+
 //FireBase
 import {ProjectDataObj, getDBProjectData, updateDBProjectList, deleteDBProjectList} from "../db/firebase"
 
@@ -15,7 +18,7 @@ interface OwnProps{
     location:any;
 };
 
-type ProjectDetailProps = OwnProps;
+type ProjectDetailProps = OwnProps & DetailPageReduxState;
 
 //ステート
 enum LOADING_STATE{
@@ -44,8 +47,10 @@ export default class ProjectDetail extends Component<ProjectDetailProps, Project
                 name:"",            // 案件名
                 srcCompany:"",      // 発注元会社名
                 startDate:"",       // 開始日
-                endDate:"",         // 期限            
+                endDate:"",         // 期限  
+                logCreateUser:"",   // 作成者
                 logCreateDate:"",   // 作成日時
+                logUpdateUser:"",   // 更新者
                 logUpdateDate:"",   // 更新日時                        
             }
         }
@@ -139,6 +144,8 @@ export default class ProjectDetail extends Component<ProjectDetailProps, Project
     //DBから取得成功時のアクション
     getDBResolvAction(data:ProjectDataObj)
     {
+        //更新者は今回のログインユーザのため、変更しておく。
+        data.logUpdateUser = this.props.user==null?"":this.props.user;
         this.setState({loading:LOADING_STATE.LOADING_COMP});
         this.setState({add_data:data});
     }

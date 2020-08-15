@@ -8,6 +8,7 @@ export interface ReduxAction{
     type:ActionType;
     data?:number;
     login?:boolean;
+    user?:string;
 }
 
 export function SampleAction(value?:number):ReduxAction
@@ -22,7 +23,7 @@ export function SampleAction(value?:number):ReduxAction
 }
 
 // ログイン状態を更新(true:ログイン、false:未ログイン)
-export function LoginAction(value:boolean):ReduxAction
+export function LoginAction(login:boolean, user:string):ReduxAction
 {
-    return {type:ActionType.LOGIN, login:value};
+    return {type:ActionType.LOGIN, login:login, user:user};
 }

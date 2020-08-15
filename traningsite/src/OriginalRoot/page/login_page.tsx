@@ -2,7 +2,7 @@
 import React, { Component, ReactEventHandler } from 'react'
 import {Helmet} from "react-helmet"
 import {Label, Button, Input} from "semantic-ui-react"
-import firebase from '../db/firebase';
+import firebase, {Provider} from '../db/firebase';
 // CSS
 import "./../css/login.scss"
 
@@ -41,6 +41,7 @@ export default class LoginPage extends Component<LoginPageProps, LoginPageState>
         //バインド
         this.LoginClick = this.LoginClick.bind(this);
         this.LoginEnter = this.LoginEnter.bind(this);
+        this.sigInGoogleAcount = this.sigInGoogleAcount.bind(this);
         this.handleMailChange = this.handleMailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
     }
@@ -61,8 +62,17 @@ export default class LoginPage extends Component<LoginPageProps, LoginPageState>
         firebase.auth().signInWithEmailAndPassword(this.state.mail, this.state.pass)
             .then(res => {
                 //正常終了時
+                let email = "";
+                if(res.user != null)
+                {
+                    if(res.user.email != null)
+                    {
+                        email = res.user.email;
+                    }
+                }
+
                 this.setState({loading:false});
-                this.props.loginaction(true);
+                this.props.loginaction(true, email);
                 if(this.props.location.pathname === "/login")
                 {
                     this.props.history.push("/");
@@ -73,10 +83,10 @@ export default class LoginPage extends Component<LoginPageProps, LoginPageState>
                 }
             })
             .catch(error => {
-                //ローディング中にする。
+                //ローディング解除にする。
                 this.setState({loading:false});
                 //異常終了時
-                this.props.loginaction(false);
+                this.props.loginaction(false, "");
                 alert(error);
             });
     }
@@ -91,6 +101,39 @@ export default class LoginPage extends Component<LoginPageProps, LoginPageState>
         {
             this.sigIn();
         }
+    }
+    sigInGoogleAcount()
+    {
+        //ローディング中にする。
+        this.setState({loading:true});
+        firebase.auth().signInWithPopup(Provider).then((res)=>{
+            //正常終了時
+            let email = "";
+            if(res.user != null)
+            {
+                if(res.user.email != null)
+                {
+                    email = res.user.email;
+                }
+            }
+
+            this.setState({loading:false});
+            this.props.loginaction(true, email);
+            if(this.props.location.pathname === "/login")
+            {
+                this.props.history.push("/");
+            }
+            else
+            {
+                this.props.history.push(this.props.location.pathname);
+            }
+        }).catch((error) => {
+            //ローディング解除にする。
+            this.setState({loading:false});
+            //異常終了時
+            this.props.loginaction(false, "");
+            alert(error);
+        });
     }
     render()
     {
@@ -111,6 +154,9 @@ export default class LoginPage extends Component<LoginPageProps, LoginPageState>
                     </div>
                     <br />
                     <Button onClick={this.LoginClick}>認証</Button>
+                    <br />
+                    <br />
+                    <Button onClick={this.sigInGoogleAcount}>Googleアカウントで認証</Button>
                 </div>
             );
         }

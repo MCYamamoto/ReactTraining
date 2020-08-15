@@ -7,15 +7,19 @@ import ComHeaer from "./component/com_header_container";
 //CSS
 import "./../css/project_add.scss"
 
+//コンテナ
+import {AddPageReduxState} from "./project_add_container"
+
 //FireBase
 import {ProjectDataObj, AddDBProjectList} from "../db/firebase"
+
 
 interface OwnProps {
     history?:any,
     location?:any
 };
 
-type ProjectAddProps = OwnProps;
+type ProjectAddProps = OwnProps & AddPageReduxState;
 
 //ステート
 interface ProjectAddState{
@@ -37,7 +41,9 @@ export default class ProjectAdd extends Component<ProjectAddProps, ProjectAddSta
                 srcCompany:"",      // 発注元会社名
                 startDate:"",       // 開始日
                 endDate:"",         // 期限
+                logCreateUser:this.props.user==null?"":this.props.user,   // 作成者
                 logCreateDate:"",   // 作成日時
+                logUpdateUser:this.props.user==null?"":this.props.user,   // 更新者
                 logUpdateDate:"",   // 更新日時                        
             }
         }

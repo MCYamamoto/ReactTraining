@@ -16,12 +16,12 @@ export const mapStateToProps =(state:ReduxState) => {
 }
 
 export interface PrivaterouteReduxAction {
-    loginaction(value:boolean):void;
+    loginaction(login:boolean, user:string):void;
 }
 
 // dispatch関数をコンポーネントにマッピングする関数
 export const mapDispatchToProps =(dispatch:Dispatch) => ({
-    loginaction: (value:boolean) => dispatch(LoginAction(value))
+    loginaction: (login:boolean, user:string) => dispatch(LoginAction(login, user))
 })
 
 

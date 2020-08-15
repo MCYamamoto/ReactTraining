@@ -2,9 +2,9 @@ import {connect} from 'react-redux'
 import {Dispatch} from "redux"
 
 import {ReduxState} from "../redux/store"
-import ProjectAdd from "./project_add"
+import ProjectDetail from "./project_detail"
 
-export interface AddPageReduxState {
+export interface DetailPageReduxState {
     login?:boolean;
     user?:string;
 }
@@ -16,4 +16,4 @@ export const mapStateToProps =(state:ReduxState) => {
     }
 }
 
-export default connect(mapStateToProps)(ProjectAdd);
+export default connect(mapStateToProps)(ProjectDetail);

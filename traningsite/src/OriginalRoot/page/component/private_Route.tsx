@@ -40,12 +40,12 @@ export default class PrivateRoute extends Component<PrivateRouteProps,PrivateRou
             if (user) {
                 //してる
                 if (this.props.login === false) {
-                    this.props.loginaction(true);
+                    this.props.loginaction(true, user.email==null?"":user.email);
                 }
             } else {
                 //してない
                 if (this.props.login === true) {
-                    this.props.loginaction(false);
+                    this.props.loginaction(false,"");
                 }
             }
             //認証完了

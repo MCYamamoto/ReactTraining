@@ -5,19 +5,22 @@ import {ActionType, ReduxAction} from "./action"
 export type ReduxState = {
     sample:number;
     login:boolean;
+    user:string;
 }
 
 //デフォルト値
 const initialState:ReduxState = {
     sample:0,
-    login:false
+    login:false,
+    user:""
 }
 
 //レデューサ
 export const reducer = (state:ReduxState=initialState, action:ReduxAction)=>{
     let ret = {
         sample:state.sample,
-        login:state.login
+        login:state.login,
+        user:state.user
     }
     
     switch(action.type)
@@ -36,6 +39,10 @@ export const reducer = (state:ReduxState=initialState, action:ReduxAction)=>{
             if(action.login != null)
             {
                 ret.login = action.login;
+            }
+            if(action.user != null)
+            {
+                ret.user = action.user;
             }
             break;
         default:

@@ -18,7 +18,7 @@ import TopPage from "./OriginalRoot/page/top_page_container"
 import RouteFail from "./OriginalRoot/page/route_faire"
 import LoginPage from "./OriginalRoot/page/login_page_container"
 import ProjectList from "./OriginalRoot/page/project_list_container"
-import ProjectDetail from "./OriginalRoot/page/project_detail"
+import ProjectDetail from "./OriginalRoot/page/project_detail_container"
 import ProjectAdd from "./OriginalRoot/page/project_add_container"
 
 // import Home from "./OriginalRoot/Container"

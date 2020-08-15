@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import "firebase/firestore";
 import "firebase/storage"
 import "firebase/auth";
+// import * as functions from 'firebase-functions';
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -10,8 +11,20 @@ const firebaseConfig = {
     projectId: process.env.REACT_APP_PROJECT_ID,
     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-    appId: process.env.REACT_APP_APP_ID
+    appId: process.env.REACT_APP_APP_ID,
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
+
+// const firebaseConfig_FirebaseDeploy = {
+//     apiKey: functions.config().someservice.apikey,
+//     authDomain: functions.config().someservice.authdomain,
+//     databaseURL: functions.config().someservice.databaseurl,
+//     projectId: functions.config().someservice.projectid,
+//     storageBucket: functions.config().someservice.storagebucket,
+//     messagingSenderId: functions.config().someservice.messagingsenderid,
+//     appId: functions.config().someservice.appid,
+//     measurementId: functions.config().someservice.measurementid
+// };
 
 const app = firebase.initializeApp(firebaseConfig);
 export const db = firebase.firestore();
@@ -22,7 +35,9 @@ export interface ProjectDataObj {
     srcCompany:string,      // 発注元会社名
     startDate:string,       // 開始日
     endDate:string,         // 期限
+    logCreateUser:string,   // 作成者
     logCreateDate:string,   // 作成日時
+    logUpdateUser:string,   // 更新者
     logUpdateDate:string,   // 更新日時
 }
 
@@ -133,7 +148,9 @@ export function AddDBProjectList(add_data:ProjectDataObj,resolvAction:(res:any)=
                 srcCompany:add_data.srcCompany,
                 startDate: add_data.startDate,
                 endDate:add_data.endDate,
+                logCreateUser:add_data.logCreateUser,
                 logCreateDate:new Date(),   // 作成日時
+                logUpdateUser:add_data.logUpdateUser,
                 logUpdateDate:new Date(),   // 更新日時                            
             }).then((res)=>{
                 resolvAction(res);
@@ -165,7 +182,9 @@ export function updateDBProjectList(docID:string, add_data:ProjectDataObj,resolv
                     srcCompany:add_data.srcCompany,
                     startDate: add_data.startDate,
                     endDate:add_data.endDate,
+                    logCreateUser:add_data.logCreateUser,
                     logCreateDate:add_data.logCreateDate,
+                    logUpdateUser:add_data.logUpdateUser,
                     logUpdateDate:new Date(),   // 更新日時                            
                     }).then((res)=>{
                     resolvAction(res);
@@ -186,7 +205,9 @@ export function updateDBProjectList(docID:string, add_data:ProjectDataObj,resolv
                 srcCompany:add_data.srcCompany,
                 startDate: add_data.startDate,
                 endDate:add_data.endDate,
+                logCreateUser:add_data.logCreateUser,
                 logCreateDate:add_data.logCreateDate,
+                logUpdateUser:add_data.logUpdateUser,
                 logUpdateDate:new Date(),   // 更新日時                            
             }).then((res)=>{
                 resolvAction(res);
@@ -210,5 +231,7 @@ export function deleteDBProjectList(docID:string,resolvAction:(res:any)=>void, e
         errAction(err);
     });    
 }
+
+export const Provider = new firebase.auth.GoogleAuthProvider();
 
 export default firebase;

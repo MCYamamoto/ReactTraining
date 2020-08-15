@@ -59,7 +59,7 @@ export default class ComHeaer extends Component<ComHeaerProps>
         //FireBase SignOut
         firebase.auth().signOut();
         //REDUX ログイン状態解除
-        this.props.loginaction(false);
+        this.props.loginaction(false, "");
     }
     render()
     {
