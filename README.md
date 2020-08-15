@@ -1,6 +1,6 @@
 # ReactTraining
 React学習用  
-案件の番号を発行するサイトを作成する。  
+案件管理用のサイトを作成する。
 SPAにする。
 
 ## 使用している技術
@@ -32,15 +32,19 @@ SPAにする。
 - デザイン整えた
 ### 2020/08/14
 - リスト表示時に15個毎に次の頁とかできるようにする。
+### 2020/08/15
+- だれでもログインできるようにGoogleアカウントでも認証できるように追加した
+- DBに作成ユーザと更新ユーザを保存するようにした。
+- データリストのソート機能を追加
 
 ### 残件
-- 検索
-
+- 案件の検索
+  
 ## 確認する必要があること
 - テストの方法
 - その他必要なこと
 
-## メモ
+## 開発時メモ
 [React]
 下記でプロジェクト作成して開始
 
@@ -110,8 +114,8 @@ yarn add @types/redux @types/react-redux
 ※typescript用のものもインストールする必要あり。
 </pre>
 
-[AWS S3]
-下記を参考に環境＋デプロイまで実施した。
+[AWS-S3]
+下記を参考に環境＋デプロイまで実施してみたが、Firebaseでデプロイする方が単純に安いので切り替える。
 
 https://joppot.info/2018/11/26/4303
 
@@ -124,8 +128,10 @@ Windows10では、下記にキーの情報が保存されていた。
 C:\Users\{username}\.aws
 </pre>
 
+※AWSよりFirebaseの方が
+
 [FireBase]
-メールアドレスでの認証とDBサーバはFireBaseで行う
+Googleアカウントでの認証、メールアドレスでの認証とDBサーバ、ホスティング、全てFireBaseで行う
 
 ### 環境構築手順
 - FireBaseにログイン
@@ -134,15 +140,36 @@ C:\Users\{username}\.aws
 - 認証メールアドレス追加
 - アプリ作成を選択し、config情報出力
 
-### install方法
+### DB環境のinstall方法
 <pre>
 yarn add firebase
 yarn add @types/firebase
 </pre>
 
-### 認証部分
-
+### メールでの認証部分
+下記を参考に作成した
 https://qiita.com/zaburo/items/801bd288cec47bd28764
+
+### Googleアカウントでの認証部分
+下記を参考に作成した
+https://firebase.google.com/docs/auth/web/google-signin?hl=ja
+
+### ホスティング部分
+
+Firebaseでhostingを選択すると手順が表示されるので、その通りでできる。
+create-react-appの場合、index.htmlがpublicではなく、buildフォルダにあるので、
+対象フォルダを変更する必要がある。
+
+また、環境変数が.envファイルから読み込まれないので、下記を参考に設定する必要があった。
+
+https://qiita.com/nerdyboy_cool/items/695c8af7ca8d22761927
+
+その際、プログラム内で環境変数を参照する場合は、下記の追加が必要
+<pre>
+yarn add firebase-functions
+yarn add @types/firebase-functions
+yarn add firebase-admin
+</pre>
 
 ### 登録参照部分
 

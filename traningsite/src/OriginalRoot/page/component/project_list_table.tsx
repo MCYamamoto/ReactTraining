@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Select,DropdownItemProps,DropdownProps} from "semantic-ui-react"
+import {Select,DropdownItemProps,DropdownProps, Input} from "semantic-ui-react"
 
 //CSS
 import "../../css/project_list_table.scss"
@@ -32,6 +32,7 @@ interface OwnState {
     dispNum:number;             //１ページの表示数
     sortTitle:string;           // ソート対象
     sortType:firebaseSortType;  // ソート種別
+    searchWord:string;          // 検索ワード
     lists:getProjectDataObj[];  //表示データ
 }
 
@@ -88,6 +89,12 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
         this.clickPrevPage = this.clickPrevPage.bind(this);
         this.clickNextPage = this.clickNextPage.bind(this);
         this.selectPage = this.selectPage.bind(this);
+
+        //検索
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.searchEnter = this.searchEnter.bind(this);
+
+        //ソート順変更
         this.selectSortTitle = this.selectSortTitle.bind(this);
         this.selectSortType = this.selectSortType.bind(this);
 
@@ -107,11 +114,12 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
             dispNum:15,
             sortTitle:this.optionsSortTitle[0].value as string,           // ソート対象：案件番号
             sortType:this.optionsSortType[0].value as firebaseSortType,   // ソート種別：降順
+            searchWord:"",
             lists:[]
         }
 
         //DBからデータ取得
-        getDBProjectList("number", "desc", ((this.state.dispPage-1)*this.state.dispNum), this.state.dispNum, "", "", this.getDBResolvAction, this.getDBErrAction);
+        this.ProjectListShow();
     }
         
     //グリッド表示
@@ -158,7 +166,7 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
             }
         },()=>{
             //DBからデータ取得
-            getDBProjectList("number", "desc", (this.state.dispPage-1)*this.state.dispNum, this.state.dispNum, "", "", this.getDBResolvAction, this.getDBErrAction);
+            this.ProjectListShow();
         })
     }
     selectSortTitle(e: React.SyntheticEvent<HTMLElement, Event> ,data: DropdownProps)
@@ -169,7 +177,7 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
             sortTitle:selectSortTitle as string,
         },()=>{
             //DBからデータ取得
-            getDBProjectList(this.state.sortTitle, this.state.sortType, (this.state.dispPage-1)*this.state.dispNum, this.state.dispNum, "", "", this.getDBResolvAction, this.getDBErrAction);
+            this.ProjectListShow();
         })
     }
     selectSortType(e: React.SyntheticEvent<HTMLElement, Event> ,data: DropdownProps)
@@ -180,7 +188,7 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
             sortType:selectSortType as firebaseSortType,
         },()=>{
             //DBからデータ取得
-            getDBProjectList(this.state.sortTitle, this.state.sortType, (this.state.dispPage-1)*this.state.dispNum, this.state.dispNum, "", "", this.getDBResolvAction, this.getDBErrAction);
+            this.ProjectListShow();
         })
     }
 
@@ -194,7 +202,7 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
                 dispPage:value.dispPage-1}
             },()=>{
                 //DBからデータ取得
-                getDBProjectList("number", "desc", (this.state.dispPage-1)*this.state.dispNum, this.state.dispNum, "", "", this.getDBResolvAction, this.getDBErrAction);
+                this.ProjectListShow();
             })
         }
     }
@@ -210,7 +218,7 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
                 }
             },()=>{
                 //DBからデータ取得
-                getDBProjectList("number", "desc", (this.state.dispPage-1)*this.state.dispNum, this.state.dispNum, "", "", this.getDBResolvAction, this.getDBErrAction);
+                this.ProjectListShow();
             })
         }
     }
@@ -236,6 +244,35 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
     {
         this.setState({loading:false});
         alert(err);
+    }
+
+    //検索ワード更新
+    handlePasswordChange(e:React.ChangeEvent<HTMLInputElement>){
+        let value = e.target.value
+        this.setState({searchWord:value});
+    }
+    //検索開始(エンターキー)
+    searchEnter(e: React.KeyboardEvent<HTMLInputElement>)
+    {
+        if(e.key === "Enter")
+        {
+            //頁も1ページにする
+            this.setState((value)=>{
+                return {
+                    loading:true,
+                    dispPage:1
+                }
+            },()=>{
+                //DBからデータ取得
+                this.ProjectListShow();
+            })
+        }
+    }
+
+    //DBからデータ取得
+    ProjectListShow()
+    {
+        getDBProjectList(this.state.sortTitle, this.state.sortType, (this.state.dispPage-1)*this.state.dispNum, this.state.dispNum, "srcCompany", this.state.searchWord, this.getDBResolvAction, this.getDBErrAction);
     }
     render(){
         if(this.state.loading === false)
@@ -291,22 +328,33 @@ export default class ProjectListTable extends Component<ProjectListTableProps, O
                    value:i,
                    text:i
                });
-            } 
+            }
+            let dispPage = <div></div>;
+            if(this.state.docMaxPage > 0)
+            {
+                dispPage =
+                    <div className="project-list--main--pagedisp--select">
+                        {this.state.dispPage<=1?<div></div>:<label className="project-list--main--pageselect--label" onClick={this.clickPrevPage}>&lt;</label>}
+                        <Select style={this.selectPageStyle} value={this.state.dispPage} options={optionsDispPage} onChange={this.selectPage}/>
+                        <label className="project-list--main--pagedisp--label"> / {this.state.docMaxPage}</label>
+                        {this.state.dispPage===(this.state.docMaxPage)?<div></div>:<label className="project-list--main--pageselect--label" onClick={this.clickNextPage}>&gt;</label>}
+                    </div>
+            }
             return(
                 <div>
                     <div style={ViewTypeBtnStyle}>
-                        <div className="project-list--main--pagedisp--select">
-                            {this.state.dispPage<=1?<div></div>:<label className="project-list--main--pageselect--label" onClick={this.clickPrevPage}>&lt;</label>}
-                            <Select style={this.selectPageStyle} value={this.state.dispPage} options={optionsDispPage} onChange={this.selectPage}/>
-                            <label className="project-list--main--pagedisp--label"> / {this.state.docMaxPage}</label>
-                            {this.state.dispPage===(this.state.docMaxPage)?<div></div>:<label className="project-list--main--pageselect--label" onClick={this.clickNextPage}>&gt;</label>}
-                        </div>
+                        <input className="project-list--main--input" type="image" name="DispList" src={logoListView} alt="ListView" onClick={this.DispList} />
+                        <input className="project-list--main--input" type="image" name="DispGrid" src={logoGridView} alt="GridView" onClick={this.DispGrid} />
+                    </div>
+                    <div style={ViewTypeBtnStyle}>
+                        <Input type="text" name="searchWord" id="lsearchWord" placeholder="発注元会社名検索" onChange={this.handlePasswordChange} onKeyPress={this.searchEnter} value={this.state.searchWord}/>
+                    </div>
+                    <div style={ViewTypeBtnStyle}>
+                        {dispPage}
                         <div className="project-list--main--pagesort--select">
                             <Select style={this.selectSortTitleStyle} value={this.state.sortTitle} options={this.optionsSortTitle} onChange={this.selectSortTitle}/>
                             <Select style={this.selectSortTypeStyle} value={this.state.sortType} options={this.optionsSortType} onChange={this.selectSortType}/>
                         </div>
-                        <input className="project-list--main--input" type="image" name="DispList" src={logoListView} alt="ListView" onClick={this.DispList} />
-                        <input className="project-list--main--input" type="image" name="DispGrid" src={logoGridView} alt="GridView" onClick={this.DispGrid} />
                     </div> 
                     {this.state.ViewType===eViewType.VIEW_TYPE_LIST?ViewList:ViewLGrid}
                 </div>

@@ -2,7 +2,6 @@ import firebase from 'firebase/app';
 import "firebase/firestore";
 import "firebase/storage"
 import "firebase/auth";
-// import * as functions from 'firebase-functions';
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -14,7 +13,9 @@ const firebaseConfig = {
     appId: process.env.REACT_APP_APP_ID,
     measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
+const app = firebase.initializeApp(firebaseConfig);
 
+// import * as functions from 'firebase-functions';
 // const firebaseConfig_FirebaseDeploy = {
 //     apiKey: functions.config().someservice.apikey,
 //     authDomain: functions.config().someservice.authdomain,
@@ -25,8 +26,8 @@ const firebaseConfig = {
 //     appId: functions.config().someservice.appid,
 //     measurementId: functions.config().someservice.measurementid
 // };
+// const app = firebase.initializeApp(firebaseConfig_FirebaseDeploy);
 
-const app = firebase.initializeApp(firebaseConfig);
 export const db = firebase.firestore();
 
 export interface ProjectDataObj {
@@ -56,56 +57,64 @@ export const dbColRef = db.collection(dbInfo.ProjectListCollection);
 // Firebaseからのデータ取得
 export function getDBProjectList(OrderKey:string, Orderby:"desc" | "asc" | undefined, Offset:number, limit:number, whereParam:string, whereValue:string,resolvAction:(docsize:number,getdata:getProjectDataObj[])=>void, errAction:(erro:any)=>void):void
 {
+    let docsize = 0;
+    // let colRef = dbColRef.orderBy(OrderKey, Orderby);
     let colRef;
     //条件有の場合
     if(whereParam != "" && whereValue != "")
     {
-        colRef = dbColRef.where(whereParam, "==", whereValue).orderBy(OrderKey, Orderby);
+        // colRef = dbColRef.orderBy(whereParam).startAt(whereValue).endAt(whereValue + '\uf8ff');
+        colRef = dbColRef.where(whereParam, "==", whereValue);
     }
     //条件無の場合
     else
     {
-        colRef = dbColRef.orderBy(OrderKey, Orderby);
+        colRef = dbColRef;
     }
 
-    colRef.get()
-        .then((res)=>{
-            let docsize = res.docs.length;
-            if(Offset > docsize)
-            {
-                errAction("データ不正です。リロードしてください。");
-                return;
-            }
-            //条件有の場合
-            if(whereParam != "" && whereValue != "")
-            {
-                colRef = dbColRef.where(whereParam, "==", whereValue).orderBy(OrderKey, Orderby).startAt(res.docs[Offset]).limit(limit);
-            }
-            //条件無の場合
-            else
-            {
-                colRef = dbColRef.orderBy(OrderKey, Orderby).startAt(res.docs[Offset]).limit(limit);
-            }
-            const doc = colRef.get()
-            .then(res => {
-                //正常終了時
-                const getdata = res.docs.map(doc=>{
-                            return{
-                                docID:doc.id,
-                                data:doc.data()
-                            }
-                        }
-                    )
-                resolvAction(docsize, getdata as getProjectDataObj[]);
-            })
-            .catch(error => {
-                //異常終了時
-                errAction(error);
-            });                
-        })
-        .catch((err)=>{
-            errAction(err)
-        })
+    colRef.get().then((res)=>{
+        docsize = res.docs.length;
+        //データなければ、空を返す。
+        if(docsize === 0)
+        {
+            resolvAction(0, []);
+            return;
+        }
+        //データがあってもおかしな状態野場合、エラーを返す。
+        if(Offset > docsize)
+        {
+            errAction("データ不正です。リロードしてください。");
+            return;
+        }
+        return res.query.orderBy(OrderKey, Orderby).get();
+    }).then((res)=>{
+        if(res == null)
+        {
+            resolvAction(0, []);
+            return;
+        }
+        console.log(res.docs.length)
+        //取得位置と上限数決めて再取得
+        return res.query.startAt(res.docs[Offset]).limit(limit).get();
+    }).then(res => {
+        if(res == null)
+        {
+            resolvAction(0, []);
+            return;
+        }
+        //正常終了時
+        const getdata = res.docs.map(doc=>{
+                    return{
+                        docID:doc.id,
+                        data:doc.data()
+                    }
+                }
+            )
+        resolvAction(docsize, getdata as getProjectDataObj[]);
+    })
+    .catch((err)=>{
+        errAction(err)
+    })
 }
 
 // Firebaseからのデータ取得

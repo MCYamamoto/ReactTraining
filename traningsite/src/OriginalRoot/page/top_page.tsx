@@ -7,7 +7,6 @@ import "./../css/top.scss"
 
 // コンポーネント
 import ComHeaer from "./component/com_header_container";
-import ProjectListTable from "./component/project_list_table_container";
 
 //コンテナ
 import {TopPageReduxState, TopPageReduxAction} from "./top_page_container"
@@ -34,7 +33,7 @@ export default class TopPage extends Component<TopPageProps>{
                     </header>
                     <main id="home" className="top--main--big-bg">
                         <div className="top-main-title">
-                            <h2>株式会社モルトカリーナの案件管理</h2>
+                            <h2>株式会社モルトカリーナ案件管理</h2>
                         </div>
                     </main>
                 </body>
