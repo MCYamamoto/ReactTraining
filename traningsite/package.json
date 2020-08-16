@@ -1,7 +1,7 @@
 {
   "name": "traningsite",
   "version": "0.1.0",
-  "homepage": "./",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -19,8 +19,6 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/redux": "^3.6.0",
     "firebase": "^7.17.2",
-    "firebase-admin": "^9.1.0",
-    "firebase-functions": "^3.9.1",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

@@ -3,30 +3,33 @@ import "firebase/firestore";
 import "firebase/storage"
 import "firebase/auth";
 
-const firebaseConfig = {
-    apiKey: process.env.REACT_APP_API_KEY,
-    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-    databaseURL: process.env.REACT_APP_DATABASE_URL,
-    projectId: process.env.REACT_APP_PROJECT_ID,
-    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-    appId: process.env.REACT_APP_APP_ID,
-    measurementId: process.env.REACT_APP_MEASUREMENT_ID
-};
-const app = firebase.initializeApp(firebaseConfig);
-
-// import * as functions from 'firebase-functions';
-// const firebaseConfig_FirebaseDeploy = {
-//     apiKey: functions.config().someservice.apikey,
-//     authDomain: functions.config().someservice.authdomain,
-//     databaseURL: functions.config().someservice.databaseurl,
-//     projectId: functions.config().someservice.projectid,
-//     storageBucket: functions.config().someservice.storagebucket,
-//     messagingSenderId: functions.config().someservice.messagingsenderid,
-//     appId: functions.config().someservice.appid,
-//     measurementId: functions.config().someservice.measurementid
+//ローカル・AWSデプロイ用
+// const firebaseConfig = {
+//     apiKey: process.env.REACT_APP_API_KEY,
+//     authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+//     databaseURL: process.env.REACT_APP_DATABASE_URL,
+//     projectId: process.env.REACT_APP_PROJECT_ID,
+//     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+//     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+//     appId: process.env.REACT_APP_APP_ID,
+//     measurementId: process.env.REACT_APP_MEASUREMENT_ID
 // };
-// const app = firebase.initializeApp(firebaseConfig_FirebaseDeploy);
+// const app = firebase.initializeApp(firebaseConfig);
+
+// Firebaseへデプロイ用。認証情報だが、隠す必要は無いらしい。
+// <script src="/__/firebase/init.js"></script>でも同じものが見れる
+
+const firebaseConfig_FirebaseDeploy = {
+    apiKey: "AIzaSyD73zvERaHSP_oZQb9fvntm7R_aepuVPGI",
+    authDomain: "traingsite-e5161.firebaseapp.com",
+    databaseURL: "https://traningsite-e5161.firebaseio.com",
+    projectId: "traningsite-e5161",
+    storageBucket: "traningsite-e5161.appspot.com",
+    messagingSenderId: "69336295506",
+    appId: "1:69336295506:web:68899a86f4de6d47d2578b",
+    measurementId: "G-T5MLQWTR9J"
+};
+const app = firebase.initializeApp(firebaseConfig_FirebaseDeploy);
 
 export const db = firebase.firestore();
 
