@@ -20,14 +20,14 @@ import "firebase/auth";
 // <script src="/__/firebase/init.js"></script>でも同じものが見れる
 
 const firebaseConfig_FirebaseDeploy = {
-    apiKey: "AIzaSyD73zvERaHSP_oZQb9fvntm7R_aepuVPGI",
-    authDomain: "traingsite-e5161.firebaseapp.com",
-    databaseURL: "https://traningsite-e5161.firebaseio.com",
-    projectId: "traningsite-e5161",
-    storageBucket: "traningsite-e5161.appspot.com",
-    messagingSenderId: "69336295506",
-    appId: "1:69336295506:web:68899a86f4de6d47d2578b",
-    measurementId: "G-T5MLQWTR9J"
+    apiKey:"AIzaSyD73zvERaHSP_oZQb9fvntm7R_aepuVPGI",
+    authDomain:"traningsite-e5161.firebaseapp.com",
+    databaseURL:"https://traningsite-e5161.firebaseio.com",
+    projectId:"traningsite-e5161",
+    storageBucket:"traningsite-e5161.appspot.com",
+    messagingSenderId:"69336295506",
+    appId:"1:69336295506:web:68899a86f4de6d47d2578b",
+    measurementId:"G-T5MLQWTR9J"
 };
 const app = firebase.initializeApp(firebaseConfig_FirebaseDeploy);
 

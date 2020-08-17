@@ -13,9 +13,9 @@ SPAにする。
 - ReactRouter
 - SCSS
 - git
-- AWS S3(静的配置、DB)
+- ~~AWSS3(デプロイ)~~ Firebaseの方が無料枠が多かったので、デプロイしたが後でFirebaseに変更した
 - query-string
-- FireBase
+- FireBase(デプロイ、DB)
 
 ## 作業進捗
 ### 2020/08/08
@@ -36,6 +36,8 @@ SPAにする。
 - だれでもログインできるようにGoogleアカウントでも認証できるように追加した
 - DBに作成ユーザと更新ユーザを保存するようにした。
 - データリストのソート機能を追加
+### 2020/08/16
+  検索機能も実装。ただ、FirebaseだとOR検索や前方一致検索とソートができなかったり、複合インデックスの登録が必要だったりと、不便に感じた。
 
 ### 残件
 - 案件の検索
@@ -161,15 +163,9 @@ create-react-appの場合、index.htmlがpublicではなく、buildフォルダ�
 対象フォルダを変更する必要がある。
 
 また、環境変数が.envファイルから読み込まれないので、下記を参考に設定する必要があった。
-
-https://qiita.com/nerdyboy_cool/items/695c8af7ca8d22761927
-
-その際、プログラム内で環境変数を参照する場合は、下記の追加が必要
-<pre>
-yarn add firebase-functions
-yarn add @types/firebase-functions
-yarn add firebase-admin
-</pre>
+firebase.tsxに直書きにした。
+下記で取得できるらしく。隠す必要がある情報ではないとのこと。
+<script src="/__/firebase/init.js"></script>
 
 ### 登録参照部分
 
