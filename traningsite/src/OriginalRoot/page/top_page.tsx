@@ -28,7 +28,7 @@ export default class TopPage extends Component<TopPageProps>{
         return(
             <>
                 <Helmet title="Project List Top Page" />
-                <body className="wrapper">
+                <body>
                     <header>
                         <ComHeaer/>
                     </header>
@@ -38,7 +38,7 @@ export default class TopPage extends Component<TopPageProps>{
                         </div>
                     </main>
                     <footer>
-                        <ComFooter />
+                        <ComFooter topPage={true}/>
                     </footer>
                 </body>
             </>

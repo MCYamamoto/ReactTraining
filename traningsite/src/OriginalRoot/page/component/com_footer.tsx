@@ -8,6 +8,8 @@ import "./../../css/com_footer.scss"
 
 interface OwnProps
 {
+    testflag?:boolean;
+    topPage?:boolean;
 }
 
 type ComHeaerProps = OwnProps & ComFooterReduxState & ComFooterReduxAction;
@@ -31,17 +33,30 @@ type ComHeaerProps = OwnProps & ComFooterReduxState & ComFooterReduxAction;
                 <li>
                     <a href="http://moltocarina.co.jp/">株式会社モルトカリーナ</a>                    
                 </li>
-                <li>
-                    {props.login?props.user:"not login"}
-                </li>
-                <li>
-                    {test1},{test2}
-                    <Button onClick={onClickTest}>testButton</Button>
-                </li>
+                {props.topPage===false?
+                    (<li>
+                        {props.login?props.user:"not login"}
+                    </li>)
+                    :
+                    (<div></div>)
+                }
+                {props.testflag===true?
+                    <li>
+                        {test1},{test2}
+                        <Button onClick={onClickTest}>testButton</Button>
+                    </li>
+                    :<div></div>
+                } 
             </ul>
         </div>    
     );
  }
 );
+
+// // Propsのデフォルト値
+ComFooter.defaultProps = {
+    testflag:false,
+    topPage:false
+}
 
 export default ComFooter;

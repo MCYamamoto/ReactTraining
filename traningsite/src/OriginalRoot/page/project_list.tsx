@@ -8,6 +8,7 @@ import "./../css/project_list.scss"
 // コンポーネント
 import ComHeaer from "./component/com_header_container";
 import ProjectListTable from "./component/project_list_table_container";
+import ComFooter from "./component/com_footer_container"
 
 //コンテナ
 import {ProjectListReduxState} from "./project_list_container"
@@ -40,6 +41,9 @@ export default class ProjectList extends Component<ProjectListProps>{
                             <ProjectListTable history={this.props.history} location={this.props.location}/>
                         </div>
                     </main>
+                    <footer>
+                        <ComFooter />
+                    </footer>
                 </body>
             </>
         );
