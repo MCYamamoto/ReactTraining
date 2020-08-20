@@ -1,0 +1,26 @@
+footer
+{
+    position: absolute;/*←絶対位置*/
+    min-width: 100%;
+    bottom: 0; /*下に固定*/
+
+    background-color:#000000;
+
+    .naviFoot{
+        padding: 10px;
+        color: #ffffff;
+
+        a:link, a:visited, a:hover, a:active{
+            color: #ffffff;
+        }
+        ul{
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+        }
+        li{
+            margin-right: 50px;
+        }    
+    }
+}
+

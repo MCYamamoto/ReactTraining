@@ -3,6 +3,7 @@ import {Helmet} from "react-helmet"
 import {Label, Input, Button} from "semantic-ui-react"
 //共通ヘッダ
 import ComHeaer from "./component/com_header_container";
+import ComFooter from "./component/com_footer_container";
 
 //CSS
 import "./../css/project_add.scss"
@@ -207,6 +208,9 @@ export default class ProjectAdd extends Component<ProjectAddProps, ProjectAddSta
                     <main>
                         {dispMain}
                     </main>
+                    <footer>
+                        <ComFooter />
+                    </footer>
                 </body>
             </div>
         );

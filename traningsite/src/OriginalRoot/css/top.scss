@@ -1,6 +1,11 @@
 @import url(base.scss);
 @import url(com_header.scss);
 
+.wrapper{
+    min-height: 100vh;
+    position: relative;
+}
+
 main{
     position: sticky;
     top:0;
@@ -9,12 +14,12 @@ main{
 .top--main--big-bg{
     background-size: cover;
     background-position: center top;
-    background-repeat: no-repeat;;
+    background-repeat: no-repeat;
 }
 
 #home{
     background-image: url(../../image/pakutaso_com_flower.png);
-    min-height: 100vh;;
+    min-height: 90vh;;
     color: #4b4b4b;
 }
 

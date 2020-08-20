@@ -3,6 +3,7 @@ import {Label, Button, Input} from "semantic-ui-react"
 import {Helmet} from "react-helmet"
 import {parse} from 'query-string';
 import ComHeaer from "./component/com_header_container";
+import ComFooter from "./component/com_footer_container";
 
 //CSS
 import "./../css/project_detail.scss"
@@ -271,6 +272,9 @@ export default class ProjectDetail extends Component<ProjectDetailProps, Project
                     <main>
                         {dispMain}
                     </main>
+                    <footer>
+                        <ComFooter />
+                    </footer>
                 </body>
             </div>
         );
