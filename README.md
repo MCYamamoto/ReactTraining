@@ -64,7 +64,7 @@ yarn start
 ChromeのアドオンでChrome用かFireFox用、StandAlone用がある。
 
 
-[semantic-ui-react]  
+### [semantic-ui-react]  
 
 React用の見た目モダンにしてくれるもの  
 
