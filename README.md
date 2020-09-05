@@ -47,7 +47,7 @@ SPAにする。
 - その他必要なこと
 
 ## 開発時メモ
-[React]
+### [React]
 下記でプロジェクト作成して開始
 
 <pre>
@@ -68,12 +68,12 @@ ChromeのアドオンでChrome用かFireFox用、StandAlone用がある。
 
 React用の見た目モダンにしてくれるもの  
 
-### insatll方法
+#### insatll方法
 <pre>
 yarn add semantic-ui-react semantic-ui-css
 </pre>
 
-### 使用方法
+#### 使用方法
 index.tsxに下記インポートしといてあとは下記URL参照して使う。
 
 <pre>
@@ -84,10 +84,10 @@ import 'semantic-ui-css/semantic.min.css'
 
 https://react.semantic-ui.com/usage/
 
-[SCSS]  
+### [SCSS]  
 CSSを書きやすくしたもの
 
-### install方法
+#### install方法
 Reactに追加する方法は下記。
 <pre>
 yarn add -D node-sass
@@ -95,10 +95,10 @@ yarn add -D node-sass
 
 後は拡張子をscssにすればscssになる。
 
-[ReactRouter]  
+### [ReactRouter]  
 SPAサイトにするためのもの
 
-### install方法
+#### install方法
 <pre>
 yarn add react-router react-router-dom
 yarn add @types/react-router @types/react-router-dom
@@ -106,17 +106,17 @@ yarn add @types/react-router @types/react-router-dom
 </pre>
 
 
-[Redux]   
+### [Redux]   
 Component間でデータを共有するもの(グローバル変数のイメージ)
 
-### install方法
+#### install方法
 <pre>
 yarn add redux react-redux
 yarn add @types/redux @types/react-redux
 ※typescript用のものもインストールする必要あり。
 </pre>
 
-[AWS-S3]
+### [AWS-S3]
 下記を参考に環境＋デプロイまで実施してみたが、Firebaseでデプロイする方が単純に安いので切り替える。
 
 https://joppot.info/2018/11/26/4303
@@ -132,31 +132,31 @@ C:\Users\{username}\.aws
 
 ※AWSよりFirebaseの方が
 
-[FireBase]
+### [FireBase]
 Googleアカウントでの認証、メールアドレスでの認証とDBサーバ、ホスティング、全てFireBaseで行う
 
-### 環境構築手順
+#### 環境構築手順
 - FireBaseにログイン
 - プロジェクト作成
 - DB作成
 - 認証メールアドレス追加
 - アプリ作成を選択し、config情報出力
 
-### DB環境のinstall方法
+#### DB環境のinstall方法
 <pre>
 yarn add firebase
 yarn add @types/firebase
 </pre>
 
-### メールでの認証部分
+#### メールでの認証部分
 下記を参考に作成した
 https://qiita.com/zaburo/items/801bd288cec47bd28764
 
-### Googleアカウントでの認証部分
+#### Googleアカウントでの認証部分
 下記を参考に作成した
 https://firebase.google.com/docs/auth/web/google-signin?hl=ja
 
-### ホスティング部分
+#### ホスティング部分
 
 Firebaseでhostingを選択すると手順が表示されるので、その通りでできる。
 create-react-appの場合、index.htmlがpublicではなく、buildフォルダにあるので、
@@ -167,14 +167,14 @@ firebase.tsxに直書きにした。
 下記で取得できるらしく。隠す必要がある情報ではないとのこと。
 <script src="/__/firebase/init.js"></script>
 
-### 登録参照部分
+#### 登録参照部分
 
 https://qiita.com/zaburo/items/353524e4f54671c8eace
 
-[query-string]  
+### [query-string]  
 urlからクエリパラメータを取り出してくれる。
 
-### install方法
+#### install方法
 <pre>
 yarn add query-string
 yarn add @types/query-string

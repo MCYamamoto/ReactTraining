@@ -19,7 +19,9 @@ type ComHeaerProps = OwnProps & ComFooterReduxState & ComFooterReduxAction;
     const [test2, setTest2] = useState(10);
     
     useEffect(() => {
-        document.title = `You clicked ${test1} ${test2} times`;
+        if(props.testflag === true){
+            document.title = `You clicked ${test1} ${test2} times`;
+        } 
     });
     const onClickTest = ()=>
     {
